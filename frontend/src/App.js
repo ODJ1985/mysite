@@ -124,14 +124,14 @@ function App() {
         setUploadModalOpen(false);
         fetchAudioFiles(selectedCategory);
         e.target.reset();
-        alert('Audio uploaded successfully!');
+        alert('音声ファイルが正常にアップロードされました！');
       } else {
         const error = await response.json();
-        alert(`Upload failed: ${error.detail}`);
+        alert(`アップロードに失敗しました: ${error.detail}`);
       }
     } catch (error) {
       console.error('Upload error:', error);
-      alert('Upload failed');
+      alert('アップロードに失敗しました');
     }
   };
 
