@@ -1,0 +1,36 @@
+
+🚀 Starting PodcastHub API Tests...
+
+🔍 Testing Health Endpoint...
+✅ Passed - Status: 200
+Health check response: {'status': 'healthy', 'service': 'wyEBIYA-podcast-service'}
+
+🔍 Testing Get Categories...
+✅ Passed - Status: 200
+Found 4 categories
+  - Test Category 153158
+  - Test Meetings
+  - お店の実績
+  - 事業承継
+
+🔍 Testing file size limit functionality...
+
+🔍 Testing Upload 1MB Audio File...
+✅ Passed - Status: 200
+Successfully uploaded 1MB audio file
+
+🔍 Testing Upload 5MB Audio File...
+✅ Passed - Status: 200
+Successfully uploaded 5MB audio file
+
+🔍 Testing Upload 99MB Audio File...
+❌ Failed - Expected 200, got 413
+Response: <html>
+<head><title>413 Request Entity Too Large</title></head>
+<body>
+<center><h1>413 Request Entity Too Large</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>
+
+Failed to upload 99MB audio file: Unknown error
