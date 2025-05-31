@@ -315,16 +315,17 @@ function App() {
 
       {/* Audio Player */}
       {currentAudio && (
-        <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-gray-900 via-black to-gray-900 backdrop-blur-xl border-t border-gray-700 shadow-2xl">
-          <div className="max-w-7xl mx-auto px-6 py-4">
+        <div className="fixed bottom-0 left-0 right-0 bg-gray-200 border-t border-gray-300 neumorphic" style={{borderRadius: '30px 30px 0 0', margin: '0 20px'}}>
+          <div className="max-w-7xl mx-auto px-6 py-6">
             {/* Progress Bar - Top */}
-            <div className="mb-4">
+            <div className="mb-6">
               <div 
-                className="w-full h-1 bg-gray-700 rounded-full cursor-pointer hover:h-2 transition-all duration-200"
+                className="w-full h-2 neumorphic-inset cursor-pointer hover:h-3 transition-all duration-200 relative"
                 onClick={handleSeek}
+                style={{borderRadius: '10px'}}
               >
                 <div 
-                  className="h-full bg-gradient-to-r from-green-400 to-green-600 rounded-full shadow-lg"
+                  className="h-full bg-gradient-to-r from-blue-400 to-blue-600 rounded-full"
                   style={{ width: `${duration ? (currentTime / duration) * 100 : 0}%` }}
                 />
               </div>
@@ -333,37 +334,43 @@ function App() {
             <div className="flex items-center justify-between">
               {/* Current Track Info */}
               <div className="flex items-center space-x-4 flex-1 min-w-0">
-                <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-green-700 rounded-xl flex items-center justify-center shadow-lg">
-                  <span className="text-2xl">🎵</span>
+                <div className="w-16 h-16 neumorphic flex items-center justify-center">
+                  <span className="text-3xl">🎵</span>
                 </div>
                 <div className="min-w-0 flex-1">
-                  <h4 className="font-bold text-white text-lg truncate">{currentAudio.title}</h4>
-                  <p className="text-green-400 text-sm font-medium">{currentAudio.category}</p>
+                  <h4 className="font-bold text-gray-700 text-lg truncate">{currentAudio.title}</h4>
+                  <p className="text-blue-600 text-sm font-medium">{currentAudio.category}</p>
                 </div>
               </div>
               
               {/* Main Controls */}
-              <div className="flex items-center space-x-6 mx-8">
+              <div className="flex items-center space-x-8 mx-8">
                 <button
                   onClick={() => {
                     if (audioRef.current) {
                       audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 10);
                     }
                   }}
-                  className="p-3 text-gray-300 hover:text-white hover:bg-gray-800 rounded-full transition-all duration-200 transform hover:scale-110"
+                  className="p-4 neumorphic-button text-gray-600 hover:text-gray-800"
                   title="10秒戻る"
                 >
                   <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M11.99 5V1l-5 5 5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6h-2c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
-                    <text x="12" y="15" textAnchor="middle" fontSize="8" fill="white">10</text>
+                    <text x="12" y="15" textAnchor="middle" fontSize="8" fill="currentColor">10</text>
                   </svg>
                 </button>
                 
                 <button
                   onClick={() => playAudio(currentAudio)}
-                  className="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-400 hover:to-green-500 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 transform hover:scale-110"
+                  className="w-20 h-20 flex items-center justify-center neumorphic-button"
+                  style={{
+                    background: isPlaying 
+                      ? 'linear-gradient(135deg, #3b82f6, #2563eb)' 
+                      : 'var(--bg-primary)',
+                    color: isPlaying ? 'white' : 'var(--text-primary)'
+                  }}
                 >
-                  <span className="text-3xl text-white">
+                  <span className="text-4xl">
                     {isPlaying ? '⏸️' : '▶️'}
                   </span>
                 </button>
@@ -374,28 +381,28 @@ function App() {
                       audioRef.current.currentTime = Math.min(duration, audioRef.current.currentTime + 10);
                     }
                   }}
-                  className="p-3 text-gray-300 hover:text-white hover:bg-gray-800 rounded-full transition-all duration-200 transform hover:scale-110"
+                  className="p-4 neumorphic-button text-gray-600 hover:text-gray-800"
                   title="10秒進む"
                 >
                   <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/>
-                    <text x="12" y="15" textAnchor="middle" fontSize="8" fill="white">10</text>
+                    <text x="12" y="15" textAnchor="middle" fontSize="8" fill="currentColor">10</text>
                   </svg>
                 </button>
               </div>
               
               {/* Time and Extra Controls */}
               <div className="flex items-center space-x-6 flex-1 justify-end">
-                <div className="flex items-center space-x-2 text-sm text-gray-300">
-                  <span className="font-mono">{formatTime(currentTime)}</span>
+                <div className="flex items-center space-x-2 text-sm text-gray-600 font-mono neumorphic-inset px-4 py-2">
+                  <span>{formatTime(currentTime)}</span>
                   <span>/</span>
-                  <span className="font-mono">{formatTime(duration)}</span>
+                  <span>{formatTime(duration)}</span>
                 </div>
                 
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-4">
                   <button
                     onClick={stopAudio}
-                    className="p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-all duration-200"
+                    className="p-3 neumorphic-button text-gray-600 hover:text-gray-800"
                     title="停止"
                   >
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -403,8 +410,8 @@ function App() {
                     </svg>
                   </button>
                   
-                  <div className="flex items-center space-x-2">
-                    <svg className="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                  <div className="flex items-center space-x-2 neumorphic-inset px-3 py-2">
+                    <svg className="w-4 h-4 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
                     </svg>
                     <input
@@ -420,7 +427,7 @@ function App() {
                           audioRef.current.volume = newVolume;
                         }
                       }}
-                      className="w-20 audio-slider"
+                      className="w-20 neumorphic-slider"
                     />
                   </div>
                   
@@ -433,7 +440,7 @@ function App() {
                         audioRef.current.playbackRate = rate;
                       }
                     }}
-                    className="bg-gray-800 hover:bg-gray-700 text-white text-sm rounded-lg px-3 py-2 border border-gray-600 focus:border-green-500 transition-colors"
+                    className="neumorphic-inset text-gray-700 text-sm px-3 py-2 border-none focus:outline-none"
                   >
                     <option value="0.5">0.5x</option>
                     <option value="0.75">0.75x</option>
