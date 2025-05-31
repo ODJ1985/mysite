@@ -59,7 +59,7 @@ app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 @app.get("/api/health")
 async def health_check():
-    return {"status": "healthy", "service": "podcast-audio-service"}
+    return {"status": "healthy", "service": "wyEBIYA-podcast-service"}
 
 @app.post("/api/upload-audio")
 async def upload_audio(
