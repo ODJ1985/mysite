@@ -73,10 +73,10 @@ async def upload_audio(
     if not file.filename.endswith('.wav'):
         raise HTTPException(status_code=400, detail="Only WAV files are supported")
     
-    # Validate file size (10MB limit)
+    # Validate file size (100MB limit)
     file_content = await file.read()
-    if len(file_content) > 10 * 1024 * 1024:  # 10MB
-        raise HTTPException(status_code=400, detail="File size must be less than 10MB")
+    if len(file_content) > 100 * 1024 * 1024:  # 100MB
+        raise HTTPException(status_code=400, detail="File size must be less than 100MB")
     
     # Generate unique filename
     file_id = str(uuid.uuid4())
