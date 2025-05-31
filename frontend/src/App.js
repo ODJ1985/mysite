@@ -290,8 +290,8 @@ function App() {
 
         {audioFiles.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-gray-400 text-lg">No audio files found</p>
-            <p className="text-gray-500 mt-2">Upload your first audio file to get started!</p>
+            <p className="text-gray-400 text-lg">音声ファイルが見つかりません</p>
+            <p className="text-gray-500 mt-2">最初の音声ファイルをアップロードして始めましょう！</p>
           </div>
         )}
       </div>
