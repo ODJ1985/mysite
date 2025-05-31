@@ -209,6 +209,12 @@ function App() {
             </div>
             <div className="flex items-center space-x-4">
               <button
+                onClick={() => window.open('/preview.html', '_blank')}
+                className="px-6 py-3 neumorphic-button font-medium text-gray-700"
+              >
+                📱 プレビュー表示
+              </button>
+              <button
                 onClick={() => setCategoryModalOpen(true)}
                 className="px-6 py-3 neumorphic-button font-medium text-gray-700"
               >
