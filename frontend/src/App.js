@@ -514,21 +514,21 @@ function App() {
       {categoryModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-gray-800 rounded-xl p-6 w-full max-w-md">
-            <h2 className="text-xl font-bold mb-4 text-white">Create Category</h2>
+            <h2 className="text-xl font-bold mb-4 text-white">カテゴリを作成</h2>
             <form onSubmit={handleCreateCategory} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Category Name</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">カテゴリ名</label>
                 <input
                   type="text"
                   name="name"
                   required
                   className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
-                  placeholder="Enter category name"
+                  placeholder="カテゴリ名を入力"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Color</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">色</label>
                 <input
                   type="color"
                   name="color"
@@ -542,14 +542,14 @@ function App() {
                   type="submit"
                   className="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg font-medium transition-colors"
                 >
-                  Create
+                  作成
                 </button>
                 <button
                   type="button"
                   onClick={() => setCategoryModalOpen(false)}
                   className="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg font-medium transition-colors"
                 >
-                  Cancel
+                  キャンセル
                 </button>
               </div>
             </form>
