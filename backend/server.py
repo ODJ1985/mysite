@@ -32,9 +32,6 @@ class Category(BaseModel):
 
 app = FastAPI()
 
-# Configure max request size for large file uploads (150MB to allow 100MB files + overhead)
-app.router.route_class.get_request_handler = lambda self: self._get_request_handler()
-
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
