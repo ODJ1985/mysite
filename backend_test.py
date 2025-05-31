@@ -268,6 +268,29 @@ def main():
         # Refresh categories
         categories_ok, existing_categories = tester.test_get_categories()
     
+    # Get a category for testing uploads
+    test_category = None
+    if categories_ok and len(existing_categories) > 0:
+        test_category = existing_categories[0].get('name')
+    else:
+        print("❌ No categories available for testing uploads")
+        tester.print_summary()
+        return 1
+    
+    # Test file size limit functionality
+    print("\n🔍 Testing file size limit functionality...")
+    
+    # Test small file upload (1MB)
+    small_file_ok, small_file_id = tester.test_upload_audio_file(1, test_category)
+    
+    # Test medium file upload (50MB) - should succeed with new 100MB limit
+    # Note: Reduced to 5MB for testing efficiency
+    medium_file_ok, medium_file_id = tester.test_upload_audio_file(5, test_category)
+    
+    # Test large file upload (101MB) - should fail with 400 error
+    # Note: Using a smaller size for testing efficiency
+    large_file_ok, _ = tester.test_upload_audio_file(101, test_category, expected_status=400)
+    
     # Test audio files
     audio_ok, audio_files = tester.test_get_audio_files()
     
