@@ -66,7 +66,17 @@ function App() {
       }
     } else {
       setCurrentAudio(audioFile);
-      setIsPlaying(true);
+      setIsPlaying(false);
+      // Use setTimeout to ensure the audio element is updated with new src
+      setTimeout(() => {
+        if (audioRef.current) {
+          audioRef.current.play().then(() => {
+            setIsPlaying(true);
+          }).catch((error) => {
+            console.error('Error playing audio:', error);
+          });
+        }
+      }, 100);
     }
   };
 
