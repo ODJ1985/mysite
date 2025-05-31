@@ -74,7 +74,45 @@
   transform: translateY(-2px);
 }
 
-/* Custom range input styling */
+/* Custom range input styling for neumorphic design */
+.neumorphic-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  height: 6px;
+  border-radius: 10px;
+  background: var(--bg-primary);
+  box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light);
+}
+
+.neumorphic-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 2px 2px 4px var(--shadow-dark), -2px -2px 4px var(--shadow-light);
+  transition: all 0.3s ease;
+}
+
+.neumorphic-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+  box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light);
+}
+
+.neumorphic-slider::-moz-range-thumb {
+  background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
+  height: 18px;
+  width: 18px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  box-shadow: 2px 2px 4px var(--shadow-dark), -2px -2px 4px var(--shadow-light);
+}
+
 input[type="range"], .audio-slider {
   -webkit-appearance: none;
   appearance: none;
@@ -83,7 +121,7 @@ input[type="range"], .audio-slider {
 }
 
 input[type="range"]::-webkit-slider-track, .audio-slider::-webkit-slider-track {
-  background: #374151;
+  background: #d1d5db;
   height: 4px;
   border-radius: 2px;
 }
@@ -91,29 +129,29 @@ input[type="range"]::-webkit-slider-track, .audio-slider::-webkit-slider-track {
 input[type="range"]::-webkit-slider-thumb, .audio-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  background: #10b981;
+  background: #3b82f6;
   height: 16px;
   width: 16px;
   border-radius: 50%;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.4);
 }
 
 input[type="range"]::-moz-range-track, .audio-slider::-moz-range-track {
-  background: #374151;
+  background: #d1d5db;
   height: 4px;
   border-radius: 2px;
   border: none;
 }
 
 input[type="range"]::-moz-range-thumb, .audio-slider::-moz-range-thumb {
-  background: #10b981;
+  background: #3b82f6;
   height: 16px;
   width: 16px;
   border-radius: 50%;
   cursor: pointer;
   border: none;
-  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.4);
 }
 
 /* Audio player animations */
