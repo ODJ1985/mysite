@@ -287,8 +287,14 @@ def main():
     # Note: Reduced to 5MB for testing efficiency
     medium_file_ok, medium_file_id = tester.test_upload_audio_file(5, test_category)
     
-    # Test large file upload (101MB) - should fail with 400 error
+    # Test file just under the limit (99MB) - should succeed
     # Note: Using a smaller size for testing efficiency
+    under_limit_ok, under_limit_id = tester.test_upload_audio_file(99, test_category)
+    
+    # Test file at the limit (100MB) - should succeed
+    at_limit_ok, at_limit_id = tester.test_upload_audio_file(100, test_category)
+    
+    # Test large file upload (101MB) - should fail with 400 error
     large_file_ok, _ = tester.test_upload_audio_file(101, test_category, expected_status=400)
     
     # Test audio files
