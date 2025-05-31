@@ -205,7 +205,7 @@ function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row items-center justify-between py-4 sm:h-20">
             <div className="flex items-center mb-3 sm:mb-0">
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-700">🎧 ポッドキャストハブ</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-700">🎧 wyEBIYA Podcast</h1>
             </div>
             <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4">
               <button
