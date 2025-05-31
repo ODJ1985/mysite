@@ -321,10 +321,10 @@ function App() {
 
       {/* Audio Player */}
       {currentAudio && (
-        <div className="fixed bottom-0 left-0 right-0 bg-gray-200 border-t border-gray-300 neumorphic" style={{borderRadius: '30px 30px 0 0', margin: '0 20px'}}>
-          <div className="max-w-7xl mx-auto px-6 py-6">
+        <div className="fixed bottom-0 left-0 right-0 bg-gray-200 border-t border-gray-300 neumorphic" style={{borderRadius: '30px 30px 0 0', margin: '0 10px'}}>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
             {/* Progress Bar - Top */}
-            <div className="mb-6">
+            <div className="mb-4 sm:mb-6">
               <div 
                 className="w-full h-2 neumorphic-inset cursor-pointer hover:h-3 transition-all duration-200 relative"
                 onClick={handleSeek}
@@ -337,7 +337,131 @@ function App() {
               </div>
             </div>
             
-            <div className="flex items-center justify-between">
+            {/* Mobile Layout */}
+            <div className="block sm:hidden">
+              {/* Track Info */}
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="w-12 h-12 neumorphic flex items-center justify-center">
+                  <span className="text-2xl">🎵</span>
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h4 className="font-bold text-gray-700 text-base truncate">{currentAudio.title}</h4>
+                  <p className="text-blue-600 text-sm font-medium truncate">{currentAudio.category}</p>
+                </div>
+              </div>
+              
+              {/* Main Controls */}
+              <div className="flex items-center justify-center space-x-6 mb-4">
+                <button
+                  onClick={() => {
+                    if (audioRef.current) {
+                      audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 10);
+                    }
+                  }}
+                  className="p-3 neumorphic-button text-gray-600 hover:text-gray-800"
+                  title="10秒戻る"
+                >
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M11.99 5V1l-5 5 5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6h-2c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
+                    <text x="12" y="15" textAnchor="middle" fontSize="6" fill="currentColor">10</text>
+                  </svg>
+                </button>
+                
+                <button
+                  onClick={() => playAudio(currentAudio)}
+                  className="w-16 h-16 flex items-center justify-center neumorphic-button"
+                  style={{
+                    background: isPlaying 
+                      ? 'linear-gradient(135deg, #3b82f6, #2563eb)' 
+                      : 'var(--bg-primary)',
+                    color: isPlaying ? 'white' : 'var(--text-primary)'
+                  }}
+                >
+                  <span className="text-3xl">
+                    {isPlaying ? '⏸️' : '▶️'}
+                  </span>
+                </button>
+                
+                <button
+                  onClick={() => {
+                    if (audioRef.current) {
+                      audioRef.current.currentTime = Math.min(duration, audioRef.current.currentTime + 10);
+                    }
+                  }}
+                  className="p-3 neumorphic-button text-gray-600 hover:text-gray-800"
+                  title="10秒進む"
+                >
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/>
+                    <text x="12" y="15" textAnchor="middle" fontSize="6" fill="currentColor">10</text>
+                  </svg>
+                </button>
+              </div>
+              
+              {/* Bottom Controls */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2 text-xs text-gray-600 font-mono neumorphic-inset px-3 py-1">
+                  <span>{formatTime(currentTime)}</span>
+                  <span>/</span>
+                  <span>{formatTime(duration)}</span>
+                </div>
+                
+                <div className="flex items-center space-x-3">
+                  <button
+                    onClick={stopAudio}
+                    className="p-2 neumorphic-button text-gray-600"
+                    title="停止"
+                  >
+                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                      <rect x="6" y="6" width="12" height="12" rx="2"/>
+                    </svg>
+                  </button>
+                  
+                  <div className="flex items-center space-x-1 neumorphic-inset px-2 py-1">
+                    <svg className="w-3 h-3 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+                    </svg>
+                    <input
+                      type="range"
+                      min="0"
+                      max="1"
+                      step="0.1"
+                      value={volume}
+                      onChange={(e) => {
+                        const newVolume = parseFloat(e.target.value);
+                        setVolume(newVolume);
+                        if (audioRef.current) {
+                          audioRef.current.volume = newVolume;
+                        }
+                      }}
+                      className="w-16 neumorphic-slider"
+                    />
+                  </div>
+                  
+                  <select
+                    value={playbackRate}
+                    onChange={(e) => {
+                      const rate = parseFloat(e.target.value);
+                      setPlaybackRate(rate);
+                      if (audioRef.current) {
+                        audioRef.current.playbackRate = rate;
+                      }
+                    }}
+                    className="neumorphic-inset text-gray-700 text-xs px-2 py-1 border-none focus:outline-none"
+                  >
+                    <option value="0.5">0.5x</option>
+                    <option value="0.75">0.75x</option>
+                    <option value="1">1x</option>
+                    <option value="1.25">1.25x</option>
+                    <option value="1.5">1.5x</option>
+                    <option value="2">2x</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            {/* Desktop Layout */}
+            <div className="hidden sm:flex items-center justify-between">
               {/* Current Track Info */}
               <div className="flex items-center space-x-4 flex-1 min-w-0">
                 <div className="w-16 h-16 neumorphic flex items-center justify-center">
