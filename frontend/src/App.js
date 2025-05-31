@@ -199,24 +199,24 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black text-white">
+    <div className="min-h-screen bg-gray-200 text-gray-700">
       {/* Header */}
-      <header className="bg-black bg-opacity-50 backdrop-blur-md border-b border-gray-800">
+      <header className="bg-gray-200 border-b border-gray-300 neumorphic" style={{borderRadius: '0 0 30px 30px', margin: '0 20px'}}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-20">
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-green-400">🎧 ポッドキャストハブ</h1>
+              <h1 className="text-3xl font-bold text-gray-700">🎧 ポッドキャストハブ</h1>
             </div>
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => setCategoryModalOpen(true)}
-                className="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg font-medium transition-colors"
+                className="px-6 py-3 neumorphic-button font-medium text-gray-700"
               >
                 カテゴリ追加
               </button>
               <button
                 onClick={() => setUploadModalOpen(true)}
-                className="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg font-medium transition-colors"
+                className="px-6 py-3 neumorphic-button font-medium text-gray-700"
               >
                 音声アップロード
               </button>
@@ -225,16 +225,16 @@ function App() {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 py-8">
         {/* Category Filter */}
         <div className="mb-8">
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-4">
             <button
               onClick={() => setSelectedCategory('')}
-              className={`px-4 py-2 rounded-full font-medium transition-colors ${
+              className={`px-6 py-3 font-medium transition-all duration-300 ${
                 selectedCategory === '' 
-                  ? 'bg-green-600 text-white' 
-                  : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                  ? 'neumorphic-inset text-blue-600' 
+                  : 'neumorphic-button text-gray-700'
               }`}
             >
               全てのカテゴリ
@@ -243,14 +243,11 @@ function App() {
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.name)}
-                className={`px-4 py-2 rounded-full font-medium transition-colors ${
+                className={`px-6 py-3 font-medium transition-all duration-300 ${
                   selectedCategory === category.name
-                    ? 'bg-green-600 text-white'
-                    : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
+                    ? 'neumorphic-inset text-blue-600'
+                    : 'neumorphic-button text-gray-700'
                 }`}
-                style={{
-                  backgroundColor: selectedCategory === category.name ? category.color : undefined
-                }}
               >
                 {category.name}
               </button>
@@ -259,34 +256,42 @@ function App() {
         </div>
 
         {/* Audio Files Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
           {audioFiles.map((audio) => (
-            <div key={audio.id} className="bg-gray-800 rounded-xl p-6 hover:bg-gray-700 transition-colors">
+            <div key={audio.id} className="neumorphic-card p-6">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-white mb-2">{audio.title}</h3>
-                  <p className="text-gray-400 text-sm">{audio.category}</p>
+                  <h3 className="text-xl font-semibold text-gray-700 mb-2">{audio.title}</h3>
+                  <p className="text-blue-600 text-sm font-medium">{audio.category}</p>
                   <p className="text-gray-500 text-xs mt-1">
                     {new Date(audio.uploaded_at).toLocaleDateString()}
                   </p>
                 </div>
                 <button
                   onClick={() => deleteAudioFile(audio.id)}
-                  className="text-red-400 hover:text-red-300 transition-colors"
+                  className="text-red-500 hover:text-red-600 transition-colors p-2 neumorphic-button"
                 >
                   🗑️
                 </button>
               </div>
               
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-4">
                 <button
                   onClick={() => playAudio(audio)}
-                  className="flex-shrink-0 w-12 h-12 bg-green-600 hover:bg-green-700 rounded-full flex items-center justify-center transition-colors"
+                  className="flex-shrink-0 w-16 h-16 neumorphic-button flex items-center justify-center"
+                  style={{
+                    background: currentAudio && currentAudio.id === audio.id && isPlaying 
+                      ? 'linear-gradient(135deg, #3b82f6, #2563eb)' 
+                      : 'var(--bg-primary)',
+                    color: currentAudio && currentAudio.id === audio.id && isPlaying ? 'white' : 'var(--text-primary)'
+                  }}
                 >
-                  {currentAudio && currentAudio.id === audio.id && isPlaying ? '⏸️' : '▶️'}
+                  <span className="text-2xl">
+                    {currentAudio && currentAudio.id === audio.id && isPlaying ? '⏸️' : '▶️'}
+                  </span>
                 </button>
                 <div className="flex-1">
-                  <div className="text-sm text-gray-400">
+                  <div className="text-sm text-gray-600 font-medium">
                     {audio.original_filename}
                   </div>
                   <div className="text-xs text-gray-500">
@@ -299,9 +304,11 @@ function App() {
         </div>
 
         {audioFiles.length === 0 && (
-          <div className="text-center py-12">
-            <p className="text-gray-400 text-lg">音声ファイルが見つかりません</p>
-            <p className="text-gray-500 mt-2">最初の音声ファイルをアップロードして始めましょう！</p>
+          <div className="text-center py-16">
+            <div className="neumorphic-card p-12 max-w-md mx-auto">
+              <p className="text-gray-600 text-xl mb-2">音声ファイルが見つかりません</p>
+              <p className="text-gray-500">最初の音声ファイルをアップロードして始めましょう！</p>
+            </div>
           </div>
         )}
       </div>
