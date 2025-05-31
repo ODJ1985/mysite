@@ -231,60 +231,60 @@ function App() {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Category Filter */}
-        <div className="mb-8">
-          <div className="flex flex-wrap gap-4">
+        <div className="mb-6">
+          <div className="flex flex-wrap gap-2 sm:gap-4 justify-center sm:justify-start">
             <button
               onClick={() => setSelectedCategory('')}
-              className={`px-6 py-3 font-medium transition-all duration-300 ${
+              className={`px-3 py-2 sm:px-6 sm:py-3 text-sm sm:text-base font-medium transition-all duration-300 ${
                 selectedCategory === '' 
                   ? 'neumorphic-inset text-blue-600' 
                   : 'neumorphic-button text-gray-700'
               }`}
             >
-              全てのカテゴリ
+              全て
             </button>
             {categories.map((category) => (
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.name)}
-                className={`px-6 py-3 font-medium transition-all duration-300 ${
+                className={`px-3 py-2 sm:px-6 sm:py-3 text-sm sm:text-base font-medium transition-all duration-300 ${
                   selectedCategory === category.name
                     ? 'neumorphic-inset text-blue-600'
                     : 'neumorphic-button text-gray-700'
                 }`}
               >
-                {category.name}
+                {category.name.length > 10 ? category.name.substring(0, 10) + '...' : category.name}
               </button>
             ))}
           </div>
         </div>
 
         {/* Audio Files Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-20 sm:mb-8">
           {audioFiles.map((audio) => (
-            <div key={audio.id} className="neumorphic-card p-6">
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex-1">
-                  <h3 className="text-xl font-semibold text-gray-700 mb-2">{audio.title}</h3>
-                  <p className="text-blue-600 text-sm font-medium">{audio.category}</p>
+            <div key={audio.id} className="neumorphic-card p-4 sm:p-6">
+              <div className="flex items-start justify-between mb-3 sm:mb-4">
+                <div className="flex-1 min-w-0">
+                  <h3 className="text-lg sm:text-xl font-semibold text-gray-700 mb-1 sm:mb-2 truncate">{audio.title}</h3>
+                  <p className="text-blue-600 text-xs sm:text-sm font-medium truncate">{audio.category}</p>
                   <p className="text-gray-500 text-xs mt-1">
                     {new Date(audio.uploaded_at).toLocaleDateString()}
                   </p>
                 </div>
                 <button
                   onClick={() => deleteAudioFile(audio.id)}
-                  className="text-red-500 hover:text-red-600 transition-colors p-2 neumorphic-button"
+                  className="text-red-500 hover:text-red-600 transition-colors p-2 neumorphic-button ml-2"
                 >
                   🗑️
                 </button>
               </div>
               
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-3 sm:space-x-4">
                 <button
                   onClick={() => playAudio(audio)}
-                  className="flex-shrink-0 w-16 h-16 neumorphic-button flex items-center justify-center"
+                  className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 neumorphic-button flex items-center justify-center"
                   style={{
                     background: currentAudio && currentAudio.id === audio.id && isPlaying 
                       ? 'linear-gradient(135deg, #3b82f6, #2563eb)' 
@@ -292,12 +292,12 @@ function App() {
                     color: currentAudio && currentAudio.id === audio.id && isPlaying ? 'white' : 'var(--text-primary)'
                   }}
                 >
-                  <span className="text-2xl">
+                  <span className="text-xl sm:text-2xl">
                     {currentAudio && currentAudio.id === audio.id && isPlaying ? '⏸️' : '▶️'}
                   </span>
                 </button>
-                <div className="flex-1">
-                  <div className="text-sm text-gray-600 font-medium">
+                <div className="flex-1 min-w-0">
+                  <div className="text-xs sm:text-sm text-gray-600 font-medium truncate">
                     {audio.original_filename}
                   </div>
                   <div className="text-xs text-gray-500">
