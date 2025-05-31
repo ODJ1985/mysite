@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ポッドキャストハブ - プレビュー</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Neumorphic Design Variables */
+        :root {
+            --bg-primary: #e5e7eb;
+            --bg-secondary: #f3f4f6;
+            --shadow-light: #ffffff;
+            --shadow-dark: #c3c7cf;
+            --text-primary: #374151;
+            --text-secondary: #6b7280;
+            --accent-color: #3b82f6;
+            --accent-hover: #2563eb;
+        }
+
+        /* Neumorphic Base Styles */
+        .neumorphic {
+            background: var(--bg-primary);
+            border-radius: 20px;
+            box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
+        }
+
+        .neumorphic-inset {
+            background: var(--bg-primary);
+            border-radius: 15px;
+            box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+        }
+
+        .neumorphic-button {
+            background: var(--bg-primary);
+            border-radius: 15px;
+            box-shadow: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
+            transition: all 0.3s ease;
+            border: none;
+            color: var(--text-primary);
+        }
+
+        .neumorphic-button:hover {
+            box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
+            transform: translateY(-1px);
+        }
+
+        .neumorphic-card {
+            background: var(--bg-primary);
+            border-radius: 20px;
+            box-shadow: 10px 10px 20px var(--shadow-dark), -10px -10px 20px var(--shadow-light);
+            transition: all 0.3s ease;
+        }
+
+        .neumorphic-card:hover {
+            box-shadow: 15px 15px 30px var(--shadow-dark), -15px -15px 30px var(--shadow-light);
+            transform: translateY(-2px);
+        }
+
+        .audio-player {
+            background: var(--bg-primary);
+            border-radius: 30px 30px 0 0;
+            box-shadow: 0 -10px 25px var(--shadow-dark), 0 -5px 15px var(--shadow-light);
+        }
+    </style>
+</head>
+<body class="min-h-screen text-gray-700" style="background: #e5e7eb;">
+    <!-- Header -->
+    <header class="border-b border-gray-300 neumorphic mb-8" style="border-radius: 0 0 30px 30px; margin: 0 20px;">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center">
+                    <h1 class="text-3xl font-bold text-gray-700">🎧 ポッドキャストハブ</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="px-6 py-3 neumorphic-button font-medium text-gray-700">
+                        カテゴリ追加
+                    </button>
+                    <button class="px-6 py-3 neumorphic-button font-medium text-gray-700">
+                        音声アップロード
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 py-8">
+        <!-- Category Filter -->
+        <div class="mb-8">
+            <div class="flex flex-wrap gap-4">
+                <button class="px-6 py-3 font-medium neumorphic-inset text-blue-600">
+                    全てのカテゴリ
+                </button>
+                <button class="px-6 py-3 font-medium neumorphic-button text-gray-700">
+                    Test Category 153158
+                </button>
+                <button class="px-6 py-3 font-medium neumorphic-button text-gray-700">
+                    Test Meetings
+                </button>
+            </div>
+        </div>
+
+        <!-- Audio Files Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+            <!-- Audio File 1 -->
+            <div class="neumorphic-card p-6">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Test2</h3>
+                        <p class="text-blue-600 text-sm font-medium">Test Meetings</p>
+                        <p class="text-gray-500 text-xs mt-1">5/31/2025</p>
+                    </div>
+                    <button class="text-red-500 hover:text-red-600 transition-colors p-2 neumorphic-button">
+                        🗑️
+                    </button>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button onclick="showPlayer('Test2', 'Test Meetings')" 
+                            class="flex-shrink-0 w-16 h-16 neumorphic-button flex items-center justify-center">
+                        <span class="text-2xl">▶️</span>
+                    </button>
+                    <div class="flex-1">
+                        <div class="text-sm text-gray-600 font-medium">output.wav</div>
+                        <div class="text-xs text-gray-500">0.25 MB</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Audio File 2 -->
+            <div class="neumorphic-card p-6">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">テスト</h3>
+                        <p class="text-blue-600 text-sm font-medium">Test Category 153158</p>
+                        <p class="text-gray-500 text-xs mt-1">5/31/2025</p>
+                    </div>
+                    <button class="text-red-500 hover:text-red-600 transition-colors p-2 neumorphic-button">
+                        🗑️
+                    </button>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button onclick="showPlayer('テスト', 'Test Category 153158')" 
+                            class="flex-shrink-0 w-16 h-16 neumorphic-button flex items-center justify-center">
+                        <span class="text-2xl">▶️</span>
+                    </button>
+                    <div class="flex-1">
+                        <div class="text-sm text-gray-600 font-medium">output.wav</div>
+                        <div class="text-xs text-gray-500">0.27 MB</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Audio File 3 -->
+            <div class="neumorphic-card p-6">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex-1">
+                        <h3 class="text-xl font-semibold text-gray-700 mb-2">Test Audio</h3>
+                        <p class="text-blue-600 text-sm font-medium">Test Category 153158</p>
+                        <p class="text-gray-500 text-xs mt-1">5/31/2025</p>
+                    </div>
+                    <button class="text-red-500 hover:text-red-600 transition-colors p-2 neumorphic-button">
+                        🗑️
+                    </button>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <button onclick="showPlayer('Test Audio', 'Test Category 153158')" 
+                            class="flex-shrink-0 w-16 h-16 neumorphic-button flex items-center justify-center">
+                        <span class="text-2xl">▶️</span>
+                    </button>
+                    <div class="flex-1">
+                        <div class="text-sm text-gray-600 font-medium">test_audio.wav</div>
+                        <div class="text-xs text-gray-500">0.25 MB</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Player (Initially Hidden) -->
+    <div id="audioPlayer" class="fixed bottom-0 left-0 right-0 audio-player border-t border-gray-300 hidden" style="margin: 0 20px;">
+        <div class="max-w-7xl mx-auto px-6 py-6">
+            <!-- Progress Bar -->
+            <div class="mb-6">
+                <div class="w-full h-2 neumorphic-inset cursor-pointer" style="border-radius: 10px;">
+                    <div class="h-full bg-gradient-to-r from-blue-400 to-blue-600 rounded-full" style="width: 30%;">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex items-center justify-between">
+                <!-- Current Track Info -->
+                <div class="flex items-center space-x-4 flex-1 min-w-0">
+                    <div class="w-16 h-16 neumorphic flex items-center justify-center">
+                        <span class="text-3xl">🎵</span>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                        <h4 id="currentTitle" class="font-bold text-gray-700 text-lg">Test Audio</h4>
+                        <p id="currentCategory" class="text-blue-600 text-sm font-medium">Test Category</p>
+                    </div>
+                </div>
+                
+                <!-- Main Controls -->
+                <div class="flex items-center space-x-8 mx-8">
+                    <button class="p-4 neumorphic-button text-gray-600 hover:text-gray-800" title="10秒戻る">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M11.99 5V1l-5 5 5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6h-2c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
+                            <text x="12" y="15" text-anchor="middle" font-size="8" fill="currentColor">10</text>
+                        </svg>
+                    </button>
+                    
+                    <button id="playPauseBtn" onclick="togglePlay()" 
+                            class="w-20 h-20 flex items-center justify-center neumorphic-button"
+                            style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: white;">
+                        <span class="text-4xl">⏸️</span>
+                    </button>
+                    
+                    <button class="p-4 neumorphic-button text-gray-600 hover:text-gray-800" title="10秒進む">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/>
+                            <text x="12" y="15" text-anchor="middle" font-size="8" fill="currentColor">10</text>
+                        </svg>
+                    </button>
+                </div>
+                
+                <!-- Time and Controls -->
+                <div class="flex items-center space-x-6 flex-1 justify-end">
+                    <div class="flex items-center space-x-2 text-sm text-gray-600 font-mono neumorphic-inset px-4 py-2">
+                        <span>1:23</span>
+                        <span>/</span>
+                        <span>4:56</span>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <button class="p-3 neumorphic-button text-gray-600" title="停止">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                                <rect x="6" y="6" width="12" height="12" rx="2"/>
+                            </svg>
+                        </button>
+                        
+                        <div class="flex items-center space-x-2 neumorphic-inset px-3 py-2">
+                            <svg class="w-4 h-4 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+                            </svg>
+                            <input type="range" min="0" max="1" step="0.1" value="0.8" class="w-20">
+                        </div>
+                        
+                        <select class="neumorphic-inset text-gray-700 text-sm px-3 py-2 border-none">
+                            <option value="1">1x</option>
+                            <option value="1.25">1.25x</option>
+                            <option value="1.5">1.5x</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isPlaying = false;
+
+        function showPlayer(title, category) {
+            document.getElementById('currentTitle').textContent = title;
+            document.getElementById('currentCategory').textContent = category;
+            document.getElementById('audioPlayer').classList.remove('hidden');
+            isPlaying = true;
+            updatePlayButton();
+        }
+
+        function togglePlay() {
+            isPlaying = !isPlaying;
+            updatePlayButton();
+        }
+
+        function updatePlayButton() {
+            const btn = document.getElementById('playPauseBtn');
+            const icon = btn.querySelector('span');
+            if (isPlaying) {
+                icon.textContent = '⏸️';
+                btn.style.background = 'linear-gradient(135deg, #3b82f6, #2563eb)';
+                btn.style.color = 'white';
+            } else {
+                icon.textContent = '▶️';
+                btn.style.background = 'var(--bg-primary)';
+                btn.style.color = 'var(--text-primary)';
+            }
+        }
+
+        // Add some interactive effects
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.neumorphic-card');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-4px)';
+                });
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+
+    <div class="text-center py-8">
+        <p class="text-gray-500 text-sm">✨ ニューモーフィックデザインのポッドキャストハブ ✨</p>
+        <p class="text-gray-400 text-xs mt-2">▶️ ボタンをクリックして音声プレイヤーを表示してください</p>
+    </div>
+</body>
+</html>
