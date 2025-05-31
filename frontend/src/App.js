@@ -163,7 +163,7 @@ function App() {
 
   // Delete audio file
   const deleteAudioFile = async (fileId) => {
-    if (!window.confirm('Are you sure you want to delete this audio file?')) {
+    if (!window.confirm('この音声ファイルを削除してもよろしいですか？')) {
       return;
     }
     
@@ -178,13 +178,13 @@ function App() {
           setCurrentAudio(null);
           setIsPlaying(false);
         }
-        alert('Audio file deleted successfully!');
+        alert('音声ファイルが正常に削除されました！');
       } else {
-        alert('Failed to delete audio file');
+        alert('音声ファイルの削除に失敗しました');
       }
     } catch (error) {
       console.error('Delete error:', error);
-      alert('Failed to delete audio file');
+      alert('音声ファイルの削除に失敗しました');
     }
   };
 
