@@ -447,11 +447,11 @@ function App() {
       {uploadModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-gray-800 rounded-xl p-6 w-full max-w-md">
-            <h2 className="text-xl font-bold mb-4 text-white">Upload Audio File</h2>
+            <h2 className="text-xl font-bold mb-4 text-white">音声ファイルをアップロード</h2>
             <form onSubmit={handleFileUpload} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Audio File (WAV, max 10MB)
+                  音声ファイル（WAV、最大10MB）
                 </label>
                 <input
                   ref={fileInputRef}
@@ -464,24 +464,24 @@ function App() {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Title</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">タイトル</label>
                 <input
                   type="text"
                   name="title"
                   required
                   className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
-                  placeholder="Enter audio title"
+                  placeholder="音声のタイトルを入力"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Category</label>
+                <label className="block text-sm font-medium text-gray-300 mb-2">カテゴリ</label>
                 <select
                   name="category"
                   required
                   className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
                 >
-                  <option value="">Select a category</option>
+                  <option value="">カテゴリを選択</option>
                   {categories.map((category) => (
                     <option key={category.id} value={category.name}>
                       {category.name}
@@ -495,14 +495,14 @@ function App() {
                   type="submit"
                   className="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg font-medium transition-colors"
                 >
-                  Upload
+                  アップロード
                 </button>
                 <button
                   type="button"
                   onClick={() => setUploadModalOpen(false)}
                   className="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg font-medium transition-colors"
                 >
-                  Cancel
+                  キャンセル
                 </button>
               </div>
             </form>
