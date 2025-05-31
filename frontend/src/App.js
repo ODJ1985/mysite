@@ -150,14 +150,14 @@ function App() {
         setCategoryModalOpen(false);
         fetchCategories();
         e.target.reset();
-        alert('Category created successfully!');
+        alert('カテゴリが正常に作成されました！');
       } else {
         const error = await response.json();
-        alert(`Failed to create category: ${error.detail}`);
+        alert(`カテゴリの作成に失敗しました: ${error.detail}`);
       }
     } catch (error) {
       console.error('Category creation error:', error);
-      alert('Failed to create category');
+      alert('カテゴリの作成に失敗しました');
     }
   };
 
