@@ -5,17 +5,73 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #1f2937;
+  background: #e5e7eb;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #374151;
+  background: #9ca3af;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #4b5563;
+  background: #6b7280;
+}
+
+/* Neumorphic Design Variables */
+:root {
+  --bg-primary: #e5e7eb;
+  --bg-secondary: #f3f4f6;
+  --shadow-light: #ffffff;
+  --shadow-dark: #c3c7cf;
+  --text-primary: #374151;
+  --text-secondary: #6b7280;
+  --accent-color: #3b82f6;
+  --accent-hover: #2563eb;
+}
+
+/* Neumorphic Base Styles */
+.neumorphic {
+  background: var(--bg-primary);
+  border-radius: 20px;
+  box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
+}
+
+.neumorphic-inset {
+  background: var(--bg-primary);
+  border-radius: 15px;
+  box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+}
+
+.neumorphic-button {
+  background: var(--bg-primary);
+  border-radius: 15px;
+  box-shadow: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
+  transition: all 0.3s ease;
+  border: none;
+  color: var(--text-primary);
+}
+
+.neumorphic-button:hover {
+  box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
+  transform: translateY(-1px);
+}
+
+.neumorphic-button:active {
+  box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light);
+  transform: translateY(0);
+}
+
+.neumorphic-card {
+  background: var(--bg-primary);
+  border-radius: 20px;
+  box-shadow: 10px 10px 20px var(--shadow-dark), -10px -10px 20px var(--shadow-light);
+  transition: all 0.3s ease;
+}
+
+.neumorphic-card:hover {
+  box-shadow: 15px 15px 30px var(--shadow-dark), -15px -15px 30px var(--shadow-light);
+  transform: translateY(-2px);
 }
 
 /* Custom range input styling */
