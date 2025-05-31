@@ -195,20 +195,20 @@ function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-green-400">🎧 PodcastHub</h1>
+              <h1 className="text-2xl font-bold text-green-400">🎧 ポッドキャストハブ</h1>
             </div>
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => setCategoryModalOpen(true)}
                 className="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg font-medium transition-colors"
               >
-                Add Category
+                カテゴリ追加
               </button>
               <button
                 onClick={() => setUploadModalOpen(true)}
                 className="px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg font-medium transition-colors"
               >
-                Upload Audio
+                音声アップロード
               </button>
             </div>
           </div>
