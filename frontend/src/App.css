@@ -182,21 +182,37 @@ input[type="file"]:hover {
   background: #4b5563;
 }
 
-/* Grid responsiveness */
-@media (max-width: 768px) {
-  .grid {
-    grid-template-columns: 1fr;
+/* Mobile specific optimizations */
+@media (max-width: 640px) {
+  .neumorphic {
+    border-radius: 15px;
+    box-shadow: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
   }
   
-  .fixed.bottom-0 .flex {
-    flex-direction: column;
-    gap: 1rem;
+  .neumorphic-card {
+    border-radius: 15px;
+    box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);
   }
   
-  .fixed.bottom-0 .flex > div {
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
+  .neumorphic-button {
+    border-radius: 12px;
+    box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
+  }
+  
+  .neumorphic-inset {
+    border-radius: 10px;
+    box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
+  }
+
+  /* Mobile audio player adjustments */
+  .audio-player {
+    border-radius: 25px 25px 0 0;
+    margin: 0 5px;
+  }
+  
+  /* Prevent text overflow on mobile */
+  h1, h2, h3, h4 {
+    word-break: break-word;
   }
 }
 
