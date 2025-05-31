@@ -432,7 +432,7 @@ function App() {
           
           <audio
             ref={audioRef}
-            src={currentAudio ? `${backendUrl}${currentAudio.file_url}` : ''}
+            src={currentAudio ? `${backendUrl}/api/audio-stream/${currentAudio.id}` : ''}
             onTimeUpdate={handleTimeUpdate}
             onLoadedMetadata={handleLoadedMetadata}
             onPlay={() => setIsPlaying(true)}
