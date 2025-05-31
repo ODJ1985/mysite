@@ -298,31 +298,57 @@ function App() {
 
       {/* Audio Player */}
       {currentAudio && (
-        <div className="fixed bottom-0 left-0 right-0 bg-black bg-opacity-95 backdrop-blur-md border-t border-gray-800 p-4">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex items-center space-x-4">
-              <div className="flex-1">
-                <h4 className="font-semibold text-white">{currentAudio.title}</h4>
-                <p className="text-sm text-gray-400">{currentAudio.category}</p>
+        <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-gray-900 via-black to-gray-900 backdrop-blur-xl border-t border-gray-700 shadow-2xl">
+          <div className="max-w-7xl mx-auto px-6 py-4">
+            {/* Progress Bar - Top */}
+            <div className="mb-4">
+              <div 
+                className="w-full h-1 bg-gray-700 rounded-full cursor-pointer hover:h-2 transition-all duration-200"
+                onClick={handleSeek}
+              >
+                <div 
+                  className="h-full bg-gradient-to-r from-green-400 to-green-600 rounded-full shadow-lg"
+                  style={{ width: `${duration ? (currentTime / duration) * 100 : 0}%` }}
+                />
+              </div>
+            </div>
+            
+            <div className="flex items-center justify-between">
+              {/* Current Track Info */}
+              <div className="flex items-center space-x-4 flex-1 min-w-0">
+                <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-green-700 rounded-xl flex items-center justify-center shadow-lg">
+                  <span className="text-2xl">🎵</span>
+                </div>
+                <div className="min-w-0 flex-1">
+                  <h4 className="font-bold text-white text-lg truncate">{currentAudio.title}</h4>
+                  <p className="text-green-400 text-sm font-medium">{currentAudio.category}</p>
+                </div>
               </div>
               
-              <div className="flex items-center space-x-2">
+              {/* Main Controls */}
+              <div className="flex items-center space-x-6 mx-8">
                 <button
                   onClick={() => {
                     if (audioRef.current) {
                       audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 10);
                     }
                   }}
-                  className="p-2 text-gray-400 hover:text-white transition-colors"
+                  className="p-3 text-gray-300 hover:text-white hover:bg-gray-800 rounded-full transition-all duration-200 transform hover:scale-110"
+                  title="10秒戻る"
                 >
-                  ⏪
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M11.99 5V1l-5 5 5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6h-2c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
+                    <text x="12" y="15" textAnchor="middle" fontSize="8" fill="white">10</text>
+                  </svg>
                 </button>
                 
                 <button
                   onClick={() => playAudio(currentAudio)}
-                  className="w-12 h-12 bg-green-600 hover:bg-green-700 rounded-full flex items-center justify-center transition-colors"
+                  className="w-16 h-16 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-400 hover:to-green-500 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 transform hover:scale-110"
                 >
-                  {isPlaying ? '⏸️' : '▶️'}
+                  <span className="text-3xl text-white">
+                    {isPlaying ? '⏸️' : '▶️'}
+                  </span>
                 </button>
                 
                 <button
@@ -331,69 +357,75 @@ function App() {
                       audioRef.current.currentTime = Math.min(duration, audioRef.current.currentTime + 10);
                     }
                   }}
-                  className="p-2 text-gray-400 hover:text-white transition-colors"
+                  className="p-3 text-gray-300 hover:text-white hover:bg-gray-800 rounded-full transition-all duration-200 transform hover:scale-110"
+                  title="10秒進む"
                 >
-                  ⏩
-                </button>
-                
-                <button
-                  onClick={stopAudio}
-                  className="p-2 text-gray-400 hover:text-white transition-colors"
-                >
-                  ⏹️
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 5V1l5 5-5 5V7c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6h2c0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8z"/>
+                    <text x="12" y="15" textAnchor="middle" fontSize="8" fill="white">10</text>
+                  </svg>
                 </button>
               </div>
               
-              <div className="flex items-center space-x-2 flex-1 max-w-md">
-                <span className="text-xs text-gray-400 w-12">{formatTime(currentTime)}</span>
-                <div 
-                  className="flex-1 h-2 bg-gray-700 rounded-full cursor-pointer"
-                  onClick={handleSeek}
-                >
-                  <div 
-                    className="h-full bg-green-600 rounded-full"
-                    style={{ width: `${duration ? (currentTime / duration) * 100 : 0}%` }}
-                  />
+              {/* Time and Extra Controls */}
+              <div className="flex items-center space-x-6 flex-1 justify-end">
+                <div className="flex items-center space-x-2 text-sm text-gray-300">
+                  <span className="font-mono">{formatTime(currentTime)}</span>
+                  <span>/</span>
+                  <span className="font-mono">{formatTime(duration)}</span>
                 </div>
-                <span className="text-xs text-gray-400 w-12">{formatTime(duration)}</span>
-              </div>
-              
-              <div className="flex items-center space-x-2">
-                <span className="text-xs text-gray-400">🔊</span>
-                <input
-                  type="range"
-                  min="0"
-                  max="1"
-                  step="0.1"
-                  value={volume}
-                  onChange={(e) => {
-                    const newVolume = parseFloat(e.target.value);
-                    setVolume(newVolume);
-                    if (audioRef.current) {
-                      audioRef.current.volume = newVolume;
-                    }
-                  }}
-                  className="w-20"
-                />
                 
-                <select
-                  value={playbackRate}
-                  onChange={(e) => {
-                    const rate = parseFloat(e.target.value);
-                    setPlaybackRate(rate);
-                    if (audioRef.current) {
-                      audioRef.current.playbackRate = rate;
-                    }
-                  }}
-                  className="bg-gray-800 text-white text-xs rounded px-2 py-1"
-                >
-                  <option value="0.5">0.5x</option>
-                  <option value="0.75">0.75x</option>
-                  <option value="1">1x</option>
-                  <option value="1.25">1.25x</option>
-                  <option value="1.5">1.5x</option>
-                  <option value="2">2x</option>
-                </select>
+                <div className="flex items-center space-x-3">
+                  <button
+                    onClick={stopAudio}
+                    className="p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-all duration-200"
+                    title="停止"
+                  >
+                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <rect x="6" y="6" width="12" height="12" rx="2"/>
+                    </svg>
+                  </button>
+                  
+                  <div className="flex items-center space-x-2">
+                    <svg className="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                    </svg>
+                    <input
+                      type="range"
+                      min="0"
+                      max="1"
+                      step="0.1"
+                      value={volume}
+                      onChange={(e) => {
+                        const newVolume = parseFloat(e.target.value);
+                        setVolume(newVolume);
+                        if (audioRef.current) {
+                          audioRef.current.volume = newVolume;
+                        }
+                      }}
+                      className="w-20 audio-slider"
+                    />
+                  </div>
+                  
+                  <select
+                    value={playbackRate}
+                    onChange={(e) => {
+                      const rate = parseFloat(e.target.value);
+                      setPlaybackRate(rate);
+                      if (audioRef.current) {
+                        audioRef.current.playbackRate = rate;
+                      }
+                    }}
+                    className="bg-gray-800 hover:bg-gray-700 text-white text-sm rounded-lg px-3 py-2 border border-gray-600 focus:border-green-500 transition-colors"
+                  >
+                    <option value="0.5">0.5x</option>
+                    <option value="0.75">0.75x</option>
+                    <option value="1">1x</option>
+                    <option value="1.25">1.25x</option>
+                    <option value="1.5">1.5x</option>
+                    <option value="2">2x</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
