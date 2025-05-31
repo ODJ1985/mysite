@@ -145,6 +145,93 @@ class PodcastHubAPITester:
         except Exception as e:
             print(f"❌ Failed - Error: {str(e)}")
             return False
+            
+    def test_upload_audio_file(self, file_size_mb, category_name, expected_status=200):
+        """Test uploading an audio file with specified size"""
+        # Generate a random WAV file of specified size
+        file_content = self._generate_test_wav_file(file_size_mb)
+        
+        # Prepare the file for upload
+        files = {
+            'file': ('test_audio.wav', file_content, 'audio/wav')
+        }
+        
+        # Prepare form data
+        data = {
+            'title': f'Test Audio {file_size_mb}MB',
+            'category': category_name
+        }
+        
+        # Run the test
+        test_name = f"Upload {file_size_mb}MB Audio File"
+        success, response = self.run_test(
+            test_name,
+            "POST",
+            "api/upload-audio",
+            expected_status,
+            data=data,
+            files=files
+        )
+        
+        if success:
+            print(f"Successfully uploaded {file_size_mb}MB audio file")
+            return True, response.get('file_id', None)
+        else:
+            error_detail = response.get('detail', 'Unknown error')
+            print(f"Failed to upload {file_size_mb}MB audio file: {error_detail}")
+            return False, None
+    
+    def _generate_test_wav_file(self, size_mb):
+        """Generate a test WAV file of specified size in MB"""
+        # Simple WAV header (44 bytes)
+        wav_header = bytes([
+            # RIFF header
+            0x52, 0x49, 0x46, 0x46,  # "RIFF"
+            0x24, 0x00, 0x00, 0x00,  # Chunk size (placeholder)
+            0x57, 0x41, 0x56, 0x45,  # "WAVE"
+            
+            # Format subchunk
+            0x66, 0x6d, 0x74, 0x20,  # "fmt "
+            0x10, 0x00, 0x00, 0x00,  # Subchunk1 size (16 bytes)
+            0x01, 0x00,              # Audio format (1 = PCM)
+            0x01, 0x00,              # Num channels (1)
+            0x44, 0xac, 0x00, 0x00,  # Sample rate (44100)
+            0x88, 0x58, 0x01, 0x00,  # Byte rate
+            0x02, 0x00,              # Block align
+            0x10, 0x00,              # Bits per sample (16)
+            
+            # Data subchunk
+            0x64, 0x61, 0x74, 0x61,  # "data"
+            0x00, 0x00, 0x00, 0x00   # Subchunk2 size (placeholder)
+        ])
+        
+        # Calculate data size (1MB = 1048576 bytes)
+        data_size = int(size_mb * 1024 * 1024) - len(wav_header)
+        
+        # Update chunk sizes in header
+        wav_header_list = bytearray(wav_header)
+        # RIFF chunk size = file size - 8
+        riff_chunk_size = data_size + 36  # 36 = size of header - 8
+        wav_header_list[4:8] = riff_chunk_size.to_bytes(4, byteorder='little')
+        # Data chunk size
+        wav_header_list[40:44] = data_size.to_bytes(4, byteorder='little')
+        
+        # Create file content with header and random data
+        file_content = io.BytesIO()
+        file_content.write(bytes(wav_header_list))
+        
+        # Generate random audio data in chunks to avoid memory issues
+        chunk_size = min(1024 * 1024, data_size)  # 1MB chunks or smaller
+        remaining = data_size
+        
+        while remaining > 0:
+            current_chunk = min(chunk_size, remaining)
+            random_data = bytes([random.randint(0, 255) for _ in range(current_chunk)])
+            file_content.write(random_data)
+            remaining -= current_chunk
+        
+        file_content.seek(0)
+        return file_content
 
     def print_summary(self):
         """Print test results summary"""
