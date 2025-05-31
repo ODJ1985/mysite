@@ -469,12 +469,12 @@ function App() {
 
       {/* Upload Modal */}
       {uploadModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-gray-800 rounded-xl p-6 w-full max-w-md">
-            <h2 className="text-xl font-bold mb-4 text-white">音声ファイルをアップロード</h2>
-            <form onSubmit={handleFileUpload} className="space-y-4">
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center p-4 z-50">
+          <div className="neumorphic-card p-8 w-full max-w-md">
+            <h2 className="text-2xl font-bold mb-6 text-gray-700">音声ファイルをアップロード</h2>
+            <form onSubmit={handleFileUpload} className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
+                <label className="block text-sm font-medium text-gray-600 mb-3">
                   音声ファイル（WAV、最大10MB）
                 </label>
                 <input
@@ -483,27 +483,27 @@ function App() {
                   name="file"
                   accept=".wav"
                   required
-                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                  className="w-full px-4 py-3 neumorphic-inset text-gray-700 focus:outline-none"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">タイトル</label>
+                <label className="block text-sm font-medium text-gray-600 mb-3">タイトル</label>
                 <input
                   type="text"
                   name="title"
                   required
-                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                  className="w-full px-4 py-3 neumorphic-inset text-gray-700 focus:outline-none"
                   placeholder="音声のタイトルを入力"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">カテゴリ</label>
+                <label className="block text-sm font-medium text-gray-600 mb-3">カテゴリ</label>
                 <select
                   name="category"
                   required
-                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                  className="w-full px-4 py-3 neumorphic-inset text-gray-700 focus:outline-none"
                 >
                   <option value="">カテゴリを選択</option>
                   {categories.map((category) => (
@@ -514,17 +514,17 @@ function App() {
                 </select>
               </div>
               
-              <div className="flex space-x-4">
+              <div className="flex space-x-4 pt-4">
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg font-medium transition-colors"
+                  className="flex-1 px-6 py-3 neumorphic-button font-medium text-gray-700"
                 >
                   アップロード
                 </button>
                 <button
                   type="button"
                   onClick={() => setUploadModalOpen(false)}
-                  className="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg font-medium transition-colors"
+                  className="flex-1 px-6 py-3 neumorphic-button font-medium text-gray-700"
                 >
                   キャンセル
                 </button>
@@ -536,42 +536,42 @@ function App() {
 
       {/* Category Modal */}
       {categoryModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-gray-800 rounded-xl p-6 w-full max-w-md">
-            <h2 className="text-xl font-bold mb-4 text-white">カテゴリを作成</h2>
-            <form onSubmit={handleCreateCategory} className="space-y-4">
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center p-4 z-50">
+          <div className="neumorphic-card p-8 w-full max-w-md">
+            <h2 className="text-2xl font-bold mb-6 text-gray-700">カテゴリを作成</h2>
+            <form onSubmit={handleCreateCategory} className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">カテゴリ名</label>
+                <label className="block text-sm font-medium text-gray-600 mb-3">カテゴリ名</label>
                 <input
                   type="text"
                   name="name"
                   required
-                  className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white"
+                  className="w-full px-4 py-3 neumorphic-inset text-gray-700 focus:outline-none"
                   placeholder="カテゴリ名を入力"
                 />
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">色</label>
+                <label className="block text-sm font-medium text-gray-600 mb-3">色</label>
                 <input
                   type="color"
                   name="color"
                   defaultValue="#3B82F6"
-                  className="w-full h-10 bg-gray-700 border border-gray-600 rounded-lg"
+                  className="w-full h-12 neumorphic-inset focus:outline-none"
                 />
               </div>
               
-              <div className="flex space-x-4">
+              <div className="flex space-x-4 pt-4">
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 rounded-lg font-medium transition-colors"
+                  className="flex-1 px-6 py-3 neumorphic-button font-medium text-gray-700"
                 >
                   作成
                 </button>
                 <button
                   type="button"
                   onClick={() => setCategoryModalOpen(false)}
-                  className="flex-1 px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded-lg font-medium transition-colors"
+                  className="flex-1 px-6 py-3 neumorphic-button font-medium text-gray-700"
                 >
                   キャンセル
                 </button>
