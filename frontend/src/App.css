@@ -106,10 +106,57 @@ input[type="file"]:hover {
   }
 }
 
-/* Progress bar hover effect */
-.progress-bar:hover {
-  transform: scaleY(1.2);
-  transition: transform 0.2s ease;
+/* Audio player specific styles */
+.audio-player {
+  background: linear-gradient(135deg, rgba(17, 24, 39, 0.95), rgba(0, 0, 0, 0.98));
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(16, 185, 129, 0.3);
+  box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.5);
+}
+
+.audio-player-progress {
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.8), rgba(5, 150, 105, 0.9));
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+}
+
+.audio-player-button {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+}
+
+.audio-player-button:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.main-play-button {
+  background: linear-gradient(135deg, #10b981, #059669);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+}
+
+.main-play-button:hover {
+  background: linear-gradient(135deg, #06d6a0, #10b981);
+  box-shadow: 0 6px 25px rgba(16, 185, 129, 0.6);
+  transform: scale(1.1);
+}
+
+/* Progress bar enhancement */
+.progress-bar-container {
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.progress-bar-container:hover {
+  transform: scaleY(1.5);
+}
+
+.progress-bar-thumb {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.progress-bar-container:hover .progress-bar-thumb {
+  opacity: 1;
 }
 
 /* Button hover effects */
