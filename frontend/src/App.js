@@ -201,28 +201,28 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-200 text-gray-700">
       {/* Header */}
-      <header className="bg-gray-200 border-b border-gray-300 neumorphic" style={{borderRadius: '0 0 30px 30px', margin: '0 20px'}}>
+      <header className="bg-gray-200 border-b border-gray-300 neumorphic" style={{borderRadius: '0 0 30px 30px', margin: '0 10px'}}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
-            <div className="flex items-center">
-              <h1 className="text-3xl font-bold text-gray-700">🎧 ポッドキャストハブ</h1>
+          <div className="flex flex-col sm:flex-row items-center justify-between py-4 sm:h-20">
+            <div className="flex items-center mb-3 sm:mb-0">
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-700">🎧 ポッドキャストハブ</h1>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4">
               <button
                 onClick={() => window.open('/preview.html', '_blank')}
-                className="px-6 py-3 neumorphic-button font-medium text-gray-700"
+                className="px-4 py-2 sm:px-6 sm:py-3 neumorphic-button font-medium text-gray-700 text-sm sm:text-base"
               >
-                📱 プレビュー表示
+                📱 プレビュー
               </button>
               <button
                 onClick={() => setCategoryModalOpen(true)}
-                className="px-6 py-3 neumorphic-button font-medium text-gray-700"
+                className="px-4 py-2 sm:px-6 sm:py-3 neumorphic-button font-medium text-gray-700 text-sm sm:text-base"
               >
                 カテゴリ追加
               </button>
               <button
                 onClick={() => setUploadModalOpen(true)}
-                className="px-6 py-3 neumorphic-button font-medium text-gray-700"
+                className="px-4 py-2 sm:px-6 sm:py-3 neumorphic-button font-medium text-gray-700 text-sm sm:text-base"
               >
                 音声アップロード
               </button>
