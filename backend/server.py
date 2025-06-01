@@ -203,6 +203,28 @@ async def create_category(name: str = Form(...), color: str = Form("#3B82F6")):
     
     return {"message": "Category created successfully", "category_id": category_id}
 
+@app.delete("/api/categories/{category_name}")
+async def delete_category(category_name: str):
+    """Delete a category"""
+    
+    # Check if category exists
+    category = await db.categories.find_one({"name": category_name})
+    if not category:
+        raise HTTPException(status_code=404, detail="Category not found")
+    
+    # Check if there are audio files using this category
+    audio_files_count = await db.audio_files.count_documents({"category": category_name})
+    if audio_files_count > 0:
+        raise HTTPException(
+            status_code=400, 
+            detail=f"Cannot delete category. {audio_files_count} audio files are using this category."
+        )
+    
+    # Delete the category
+    await db.categories.delete_one({"name": category_name})
+    
+    return {"message": "Category deleted successfully", "category_name": category_name}
+
 @app.get("/api/audio-stream/{file_id}")
 async def stream_audio(file_id: str):
     """Stream audio file"""
