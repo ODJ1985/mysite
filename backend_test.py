@@ -1,235 +1,147 @@
 import requests
+import unittest
+import uuid
 import os
-import time
-import random
-import string
-import tempfile
-import wave
-import numpy as np
-import sys
+from datetime import datetime
 
-class PodcastAppTester:
-    def __init__(self, base_url="https://9fe0c2b0-7831-40b8-a607-5c9b24890339.preview.emergentagent.com"):
-        self.base_url = base_url
-        self.tests_run = 0
-        self.tests_passed = 0
-        self.category_id = None
-        self.category_name = None
+class CategoryDeletionTest(unittest.TestCase):
+    def setUp(self):
+        # Get the backend URL from environment or use the public endpoint
+        self.base_url = os.environ.get('REACT_APP_BACKEND_URL', 'https://9fe0c2b0-7831-40b8-a607-5c9b24890339.preview.emergentagent.com')
+        self.api_url = f"{self.base_url}/api"
+        
+        # Generate unique test category names
+        self.timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+        self.test_category_empty = f"TestEmpty_{self.timestamp}"
+        self.test_category_with_files = f"TestWithFiles_{self.timestamp}"
+        
+        # Create test categories
+        self.create_test_category(self.test_category_empty)
+        self.create_test_category(self.test_category_with_files)
+        
+        # Upload a test audio file to the second category
+        self.upload_test_audio_file(self.test_category_with_files)
 
-    def run_test(self, name, method, endpoint, expected_status, data=None, files=None, form_data=None):
-        """Run a single API test"""
-        url = f"{self.base_url}/api/{endpoint}"
-        headers = {}
-        
-        self.tests_run += 1
-        print(f"\n🔍 Testing {name}...")
-        
-        try:
-            if method == 'GET':
-                response = requests.get(url, headers=headers)
-            elif method == 'POST':
-                if files:
-                    response = requests.post(url, files=files, data=form_data)
-                else:
-                    response = requests.post(url, json=data, headers=headers)
-            elif method == 'DELETE':
-                response = requests.delete(url, headers=headers)
-
-            success = response.status_code == expected_status
-            if success:
-                self.tests_passed += 1
-                print(f"✅ Passed - Status: {response.status_code}")
-                try:
-                    return success, response.json()
-                except:
-                    return success, {}
-            else:
-                print(f"❌ Failed - Expected {expected_status}, got {response.status_code}")
-                try:
-                    error_detail = response.json().get('detail', 'No detail provided')
-                    print(f"Error detail: {error_detail}")
-                except:
-                    print("Could not parse error response")
-                return False, {}
-
-        except Exception as e:
-            print(f"❌ Failed - Error: {str(e)}")
-            return False, {}
-
-    def create_test_wav_file(self, size_mb, filename="test_audio.wav"):
-        """Create a WAV file of specified size in MB"""
-        print(f"Creating test WAV file of size {size_mb}MB...")
-        
-        # Create a temporary file
-        temp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.wav')
-        temp_file.close()
-        
-        # Calculate number of samples needed for target file size
-        # WAV format: 16-bit samples, mono channel, 44.1kHz
-        # Each sample is 2 bytes, so 1MB = 1024*1024/2 = 524288 samples
-        num_samples = int(size_mb * 1024 * 1024 / 2)
-        
-        # Generate random audio data (white noise)
-        audio_data = np.random.uniform(-1, 1, num_samples).astype(np.float32)
-        
-        # Normalize to 16-bit range
-        audio_data = audio_data * 32767
-        audio_data = audio_data.astype(np.int16)
-        
-        # Write to WAV file
-        with wave.open(temp_file.name, 'wb') as wav_file:
-            wav_file.setnchannels(1)  # Mono
-            wav_file.setsampwidth(2)  # 16-bit
-            wav_file.setframerate(44100)  # 44.1kHz
-            wav_file.writeframes(audio_data.tobytes())
-        
-        # Verify file size
-        actual_size = os.path.getsize(temp_file.name) / (1024 * 1024)
-        print(f"Created WAV file with actual size: {actual_size:.2f}MB")
-        
-        return temp_file.name
-
-    def test_health_check(self):
-        """Test the health check endpoint"""
-        success, response = self.run_test(
-            "Health Check",
-            "GET",
-            "health",
-            200
-        )
-        return success
-
-    def test_create_category(self):
+    def create_test_category(self, category_name):
         """Create a test category"""
-        category_name = f"Test Category {int(time.time())}"
-        
-        with requests.Session() as session:
-            url = f"{self.base_url}/api/categories"
-            form_data = {
-                "name": category_name,
-                "color": "#3B82F6"
-            }
-            
-            self.tests_run += 1
-            print(f"\n🔍 Testing Create Category...")
-            
-            try:
-                response = session.post(url, data=form_data)
-                
-                success = response.status_code == 200
-                if success:
-                    self.tests_passed += 1
-                    print(f"✅ Passed - Status: {response.status_code}")
-                    response_data = response.json()
-                    if 'category_id' in response_data:
-                        self.category_id = response_data['category_id']
-                        self.category_name = category_name
-                        return True
-                else:
-                    print(f"❌ Failed - Expected 200, got {response.status_code}")
-                    try:
-                        error_detail = response.json().get('detail', 'No detail provided')
-                        print(f"Error detail: {error_detail}")
-                    except:
-                        print("Could not parse error response")
-            except Exception as e:
-                print(f"❌ Failed - Error: {str(e)}")
-                
-        return False
+        url = f"{self.api_url}/categories"
+        data = {
+            "name": category_name,
+            "color": "#FF5733"
+        }
+        response = requests.post(url, data=data)
+        self.assertEqual(response.status_code, 200, f"Failed to create test category: {response.text}")
+        print(f"Created test category: {category_name}")
+        return response.json()
 
-    def test_get_categories(self):
-        """Test getting categories"""
-        success, response = self.run_test(
-            "Get Categories",
-            "GET",
-            "categories",
-            200
-        )
-        return success
-
-    def test_upload_audio_file(self, size_mb):
-        """Test uploading an audio file of specified size"""
-        if not self.category_name:
-            print("No category available for upload test")
-            return False
+    def upload_test_audio_file(self, category_name):
+        """Upload a test audio file to a category"""
+        url = f"{self.api_url}/upload-audio"
+        
+        # Create a small test WAV file
+        test_file_path = "/tmp/test_audio.wav"
+        with open(test_file_path, "wb") as f:
+            # Write a minimal WAV header and some data
+            # RIFF header
+            f.write(b'RIFF')
+            f.write((36).to_bytes(4, byteorder='little'))  # File size - 8
+            f.write(b'WAVE')
             
-        # Create a test WAV file
-        wav_file_path = self.create_test_wav_file(size_mb)
+            # Format chunk
+            f.write(b'fmt ')
+            f.write((16).to_bytes(4, byteorder='little'))  # Chunk size
+            f.write((1).to_bytes(2, byteorder='little'))   # Audio format (PCM)
+            f.write((1).to_bytes(2, byteorder='little'))   # Num channels
+            f.write((44100).to_bytes(4, byteorder='little'))  # Sample rate
+            f.write((44100 * 2).to_bytes(4, byteorder='little'))  # Byte rate
+            f.write((2).to_bytes(2, byteorder='little'))   # Block align
+            f.write((16).to_bytes(2, byteorder='little'))  # Bits per sample
+            
+            # Data chunk
+            f.write(b'data')
+            f.write((8).to_bytes(4, byteorder='little'))  # Chunk size
+            f.write((0).to_bytes(8, byteorder='little'))  # 8 bytes of silence
         
-        # Prepare form data
-        title = f"Test Audio {size_mb}MB {int(time.time())}"
-        
-        with open(wav_file_path, 'rb') as f:
-            files = {'file': ('test_audio.wav', f, 'audio/wav')}
-            form_data = {
-                'title': title,
-                'category': self.category_name
+        # Upload the file
+        with open(test_file_path, "rb") as f:
+            files = {"file": ("test_audio.wav", f, "audio/wav")}
+            data = {
+                "title": f"Test Audio for {category_name}",
+                "category": category_name
             }
-            
-            expected_status = 200 if size_mb <= 25 else 413
-            success, response = self.run_test(
-                f"Upload {size_mb}MB Audio File",
-                "POST",
-                "upload-audio",
-                expected_status,
-                files=files,
-                form_data=form_data
-            )
+            response = requests.post(url, files=files, data=data)
         
-        # Clean up the temporary file
+        # Clean up
+        os.remove(test_file_path)
+        
+        self.assertEqual(response.status_code, 200, f"Failed to upload test audio file: {response.text}")
+        print(f"Uploaded test audio file to category: {category_name}")
+        return response.json()
+
+    def test_delete_empty_category(self):
+        """Test deleting a category with no audio files"""
+        url = f"{self.api_url}/categories/{self.test_category_empty}"
+        response = requests.delete(url)
+        
+        self.assertEqual(response.status_code, 200, f"Failed to delete empty category: {response.text}")
+        print(f"Successfully deleted empty category: {self.test_category_empty}")
+        
+        # Verify the category is gone
+        categories_response = requests.get(f"{self.api_url}/categories")
+        categories = categories_response.json().get("categories", [])
+        category_names = [cat["name"] for cat in categories]
+        
+        self.assertNotIn(self.test_category_empty, category_names, 
+                         f"Category {self.test_category_empty} still exists after deletion")
+
+    def test_delete_category_with_files(self):
+        """Test deleting a category that has audio files (should fail)"""
+        url = f"{self.api_url}/categories/{self.test_category_with_files}"
+        response = requests.delete(url)
+        
+        self.assertEqual(response.status_code, 400, 
+                         f"Expected 400 error when deleting category with files, got {response.status_code}")
+        
+        error_detail = response.json().get("detail", "")
+        self.assertIn("Cannot delete category", error_detail, 
+                      f"Expected error message about files using category, got: {error_detail}")
+        
+        print(f"Correctly prevented deletion of category with files: {self.test_category_with_files}")
+        print(f"Error message: {error_detail}")
+
+    def test_delete_nonexistent_category(self):
+        """Test deleting a category that doesn't exist"""
+        nonexistent_category = f"NonExistent_{uuid.uuid4()}"
+        url = f"{self.api_url}/categories/{nonexistent_category}"
+        response = requests.delete(url)
+        
+        self.assertEqual(response.status_code, 404, 
+                         f"Expected 404 error when deleting nonexistent category, got {response.status_code}")
+        
+        print(f"Correctly returned 404 for nonexistent category: {nonexistent_category}")
+
+    def tearDown(self):
+        """Clean up test data"""
+        # Try to delete the test categories (may fail for the one with files, which is expected)
         try:
-            os.unlink(wav_file_path)
+            requests.delete(f"{self.api_url}/categories/{self.test_category_empty}")
         except:
             pass
             
-        return success
-
-    def test_get_audio_files(self):
-        """Test getting audio files"""
-        success, response = self.run_test(
-            "Get Audio Files",
-            "GET",
-            "audio-files",
-            200
-        )
-        return success
-
-def main():
-    # Setup
-    tester = PodcastAppTester()
-    
-    # Run tests
-    print("\n===== Testing Podcast App API =====\n")
-    
-    # Basic API tests
-    tester.test_health_check()
-    tester.test_create_category()
-    tester.test_get_categories()
-    
-    # File upload tests with different sizes
-    print("\n===== Testing File Size Limits =====\n")
-    
-    # Small file (should succeed)
-    tester.test_upload_audio_file(5)
-    
-    # Medium file (should succeed)
-    tester.test_upload_audio_file(15)
-    
-    # Large file within limit (should succeed)
-    tester.test_upload_audio_file(24)
-    
-    # File at exact limit (should succeed)
-    tester.test_upload_audio_file(25)
-    
-    # File exceeding limit (should fail with 413)
-    tester.test_upload_audio_file(26)
-    
-    # Get audio files after uploads
-    tester.test_get_audio_files()
-    
-    # Print results
-    print(f"\n📊 Tests passed: {tester.tests_passed}/{tester.tests_run}")
-    return 0 if tester.tests_passed == tester.tests_run else 1
+        # For the category with files, we need to delete the files first
+        try:
+            # Get all audio files in the category
+            response = requests.get(f"{self.api_url}/audio-files?category={self.test_category_with_files}")
+            audio_files = response.json().get("audio_files", [])
+            
+            # Delete each audio file
+            for audio in audio_files:
+                requests.delete(f"{self.api_url}/audio-file/{audio['id']}")
+                
+            # Now try to delete the category
+            requests.delete(f"{self.api_url}/categories/{self.test_category_with_files}")
+        except:
+            pass
 
 if __name__ == "__main__":
-    sys.exit(main())
+    unittest.main()
