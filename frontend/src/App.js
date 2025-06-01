@@ -119,42 +119,117 @@ function App() {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  // Upload functionality
+  // Chunked upload functionality for large files
+  const uploadFileInChunks = async (file, title, category) => {
+    const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB chunks
+    const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+    const fileId = Date.now().toString() + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      for (let chunkIndex = 0; chunkIndex < totalChunks; chunkIndex++) {
+        const start = chunkIndex * CHUNK_SIZE;
+        const end = Math.min(start + CHUNK_SIZE, file.size);
+        const chunk = file.slice(start, end);
+        
+        const formData = new FormData();
+        formData.append('chunk', chunk);
+        formData.append('chunk_number', chunkIndex.toString());
+        formData.append('total_chunks', totalChunks.toString());
+        formData.append('file_id', fileId);
+        formData.append('original_filename', file.name);
+        
+        if (chunkIndex === totalChunks - 1) {
+          // Add title and category only on the last chunk
+          formData.append('title', title);
+          formData.append('category', category);
+        }
+        
+        const response = await fetch(`${backendUrl}/api/upload-audio-chunk`, {
+          method: 'POST',
+          body: formData,
+        });
+        
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.detail || 'Chunk upload failed');
+        }
+        
+        const result = await response.json();
+        
+        // Update progress (you can add a progress bar here)
+        const progress = Math.round(((chunkIndex + 1) / totalChunks) * 100);
+        console.log(`Upload progress: ${progress}%`);
+        
+        if (result.completed) {
+          return result;
+        }
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  // Enhanced upload functionality with chunked upload for large files
   const handleFileUpload = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const fileInput = formData.get('file');
+    const title = formData.get('title');
+    const category = formData.get('category');
     
-    // Check file size before upload (7MB limit - current server constraint)
-    if (fileInput && fileInput.size > 7 * 1024 * 1024) {
-      alert('ファイルサイズが7MBを超えています。より小さなファイルを選択してください。');
+    // Check file size and choose upload method
+    const fileSize = fileInput.size;
+    const isLargeFile = fileSize > 7 * 1024 * 1024; // 7MB threshold
+    
+    // Check maximum file size (50MB for chunked uploads, 7MB for regular uploads)
+    const maxSize = isLargeFile ? 50 * 1024 * 1024 : 7 * 1024 * 1024;
+    if (fileSize > maxSize) {
+      alert(`ファイルサイズが${isLargeFile ? '50MB' : '7MB'}を超えています。より小さなファイルを選択してください。`);
       return;
     }
     
     // Show loading state
     const submitButton = e.target.querySelector('button[type="submit"]');
     const originalText = submitButton.textContent;
-    submitButton.textContent = 'アップロード中...';
+    
+    if (isLargeFile) {
+      submitButton.textContent = '大きなファイルをアップロード中...';
+    } else {
+      submitButton.textContent = 'アップロード中...';
+    }
     submitButton.disabled = true;
     
     try {
-      const response = await fetch(`${backendUrl}/api/upload-audio`, {
-        method: 'POST',
-        body: formData,
-      });
+      let response;
       
-      if (response.ok) {
-        setUploadModalOpen(false);
-        fetchAudioFiles(selectedCategory);
-        e.target.reset();
-        alert('音声ファイルが正常にアップロードされました！');
+      if (isLargeFile) {
+        // Use chunked upload for files larger than 7MB
+        response = await uploadFileInChunks(fileInput, title, category);
       } else {
-        const error = await response.json();
-        alert(`アップロードに失敗しました: ${error.detail}`);
+        // Use regular upload for smaller files
+        const uploadResponse = await fetch(`${backendUrl}/api/upload-audio`, {
+          method: 'POST',
+          body: formData,
+        });
+        
+        if (uploadResponse.ok) {
+          response = await uploadResponse.json();
+        } else {
+          const error = await uploadResponse.json();
+          throw new Error(error.detail || 'Upload failed');
+        }
       }
+      
+      setUploadModalOpen(false);
+      fetchAudioFiles(selectedCategory);
+      e.target.reset();
+      
+      const sizeText = (fileSize / (1024 * 1024)).toFixed(1);
+      alert(`音声ファイル（${sizeText}MB）が正常にアップロードされました！`);
+      
     } catch (error) {
       console.error('Upload error:', error);
-      alert('アップロードに失敗しました。ネットワーク接続を確認してください。');
+      alert(`アップロードに失敗しました: ${error.message}`);
     } finally {
       // Reset button state
       submitButton.textContent = originalText;
