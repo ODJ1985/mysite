@@ -622,7 +622,7 @@ function App() {
             <form onSubmit={handleFileUpload} className="space-y-6">
               <div>
                 <label className="block text-sm font-medium text-gray-600 mb-3">
-                  音声ファイル（WAV、最大25MB）
+                  音声ファイル（WAV、最大7MB）
                 </label>
                 <input
                   ref={fileInputRef}
