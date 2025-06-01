@@ -125,9 +125,9 @@ function App() {
     const formData = new FormData(e.target);
     const fileInput = formData.get('file');
     
-    // Check file size before upload
-    if (fileInput && fileInput.size > 100 * 1024 * 1024) {
-      alert('ファイルサイズが100MBを超えています。より小さなファイルを選択してください。');
+    // Check file size before upload (10MB limit)
+    if (fileInput && fileInput.size > 10 * 1024 * 1024) {
+      alert('ファイルサイズが10MBを超えています。より小さなファイルを選択してください。');
       return;
     }
     
