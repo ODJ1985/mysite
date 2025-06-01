@@ -223,4 +223,12 @@ async def stream_audio(file_id: str):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8001)
+    # Configure uvicorn to handle larger file uploads
+    uvicorn.run(
+        app, 
+        host="0.0.0.0", 
+        port=8001,
+        limit_max_requests=1000,
+        timeout_keep_alive=30,
+        limit_concurrency=1000
+    )
