@@ -331,12 +331,6 @@ function App() {
             </div>
             <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4">
               <button
-                onClick={() => window.open('/preview.html', '_blank')}
-                className="px-4 py-2 sm:px-6 sm:py-3 neumorphic-button font-medium text-gray-700 text-sm sm:text-base"
-              >
-                📱 プレビュー
-              </button>
-              <button
                 onClick={() => setCategoryModalOpen(true)}
                 className="px-4 py-2 sm:px-6 sm:py-3 neumorphic-button font-medium text-gray-700 text-sm sm:text-base"
               >
