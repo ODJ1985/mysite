@@ -61,6 +61,99 @@ app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 async def health_check():
     return {"status": "healthy", "service": "wyEBIYA-podcast-service"}
 
+@app.post("/api/upload-audio-chunk")
+async def upload_audio_chunk(
+    chunk: UploadFile = File(...),
+    chunk_number: int = Form(...),
+    total_chunks: int = Form(...),
+    file_id: str = Form(...),
+    title: str = Form(None),
+    category: str = Form(None),
+    original_filename: str = Form(...)
+):
+    """Upload a single chunk of an audio file"""
+    
+    try:
+        # Create chunks directory if it doesn't exist
+        chunks_dir = Path("chunks") / file_id
+        chunks_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Save chunk
+        chunk_path = chunks_dir / f"chunk_{chunk_number}"
+        chunk_content = await chunk.read()
+        
+        with open(chunk_path, "wb") as buffer:
+            buffer.write(chunk_content)
+        
+        # Check if all chunks are uploaded
+        uploaded_chunks = len(list(chunks_dir.glob("chunk_*")))
+        
+        if uploaded_chunks == total_chunks:
+            # Combine all chunks
+            combined_file_path = uploads_dir / f"{file_id}.wav"
+            
+            with open(combined_file_path, "wb") as combined_file:
+                for i in range(total_chunks):
+                    chunk_file_path = chunks_dir / f"chunk_{i}"
+                    with open(chunk_file_path, "rb") as chunk_file:
+                        combined_file.write(chunk_file.read())
+            
+            # Calculate file size
+            file_size = os.path.getsize(combined_file_path)
+            
+            # Validate total file size (50MB limit for chunked uploads)
+            if file_size > 50 * 1024 * 1024:  # 50MB
+                os.remove(combined_file_path)
+                shutil.rmtree(chunks_dir, ignore_errors=True)
+                raise HTTPException(status_code=413, detail="File size must be less than 50MB")
+            
+            # Validate file type
+            if not original_filename.endswith('.wav'):
+                os.remove(combined_file_path)
+                shutil.rmtree(chunks_dir, ignore_errors=True)
+                raise HTTPException(status_code=400, detail="Only WAV files are supported")
+            
+            # Save to database
+            audio_record = {
+                "id": file_id,
+                "filename": f"{file_id}.wav",
+                "original_filename": original_filename,
+                "title": title,
+                "category": category,
+                "file_size": file_size,
+                "uploaded_at": datetime.utcnow(),
+                "file_path": str(combined_file_path)
+            }
+            
+            await db.audio_files.insert_one(audio_record)
+            
+            # Clean up chunks
+            shutil.rmtree(chunks_dir, ignore_errors=True)
+            
+            return {
+                "message": "File uploaded successfully", 
+                "file_id": file_id, 
+                "title": title,
+                "file_size": file_size,
+                "completed": True
+            }
+        else:
+            return {
+                "message": f"Chunk {chunk_number + 1}/{total_chunks} uploaded", 
+                "chunks_uploaded": uploaded_chunks,
+                "total_chunks": total_chunks,
+                "completed": False
+            }
+    
+    except HTTPException:
+        raise
+    except Exception as e:
+        # Clean up on error
+        chunks_dir = Path("chunks") / file_id
+        if chunks_dir.exists():
+            shutil.rmtree(chunks_dir, ignore_errors=True)
+        raise HTTPException(status_code=500, detail=f"Upload failed: {str(e)}")
+
 @app.post("/api/upload-audio")
 async def upload_audio(
     file: UploadFile = File(..., description="WAV audio file (max 100MB)"),
