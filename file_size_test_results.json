@@ -1,0 +1,340 @@
+{
+  "timestamp": "2025-06-01T07:23:28.864836",
+  "tests": [
+    {
+      "name": "Create Category",
+      "method": "POST",
+      "endpoint": "categories",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response": {
+        "message": "Category created successfully",
+        "category_id": "9af6ffd6-3457-4dd9-bebf-292e58d70549"
+      },
+      "error": null,
+      "response_time_ms": 132.23
+    },
+    {
+      "name": "Health Check",
+      "method": "GET",
+      "endpoint": "health",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response": {
+        "status": "healthy",
+        "service": "wyEBIYA-podcast-service"
+      },
+      "error": null,
+      "response_time_ms": 33.76
+    },
+    {
+      "name": "Upload 1MB Audio File",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response": {
+        "message": "File uploaded successfully",
+        "file_id": "7e8c3f73-9b3e-4d37-8c20-f3ab0c4404fa",
+        "title": "Test Audio 1MB 1748762609",
+        "file_size": 1048620
+      },
+      "error": null,
+      "response_time_ms": 42.25
+    },
+    {
+      "name": "Upload 5MB Audio File",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response": {
+        "message": "File uploaded successfully",
+        "file_id": "b05907c2-b26c-4966-bdf5-6d51fee00a13",
+        "title": "Test Audio 5MB 1748762609",
+        "file_size": 5242924
+      },
+      "error": null,
+      "response_time_ms": 142.77
+    },
+    {
+      "name": "Upload 6.9MB Audio File",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response": {
+        "message": "File uploaded successfully",
+        "file_id": "56c47d96-ba04-4d69-91e1-21d6136049c2",
+        "title": "Test Audio 6.9MB 1748762609",
+        "file_size": 7235218
+      },
+      "error": null,
+      "response_time_ms": 196.82
+    },
+    {
+      "name": "Upload 7MB Audio File",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 200,
+      "actual_status": 413,
+      "success": false,
+      "response": {
+        "detail": "File size must be less than 7MB"
+      },
+      "error": "File size must be less than 7MB",
+      "response_time_ms": 126.51
+    },
+    {
+      "name": "Upload 7.1MB Audio File",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 413,
+      "actual_status": 413,
+      "success": true,
+      "response": {
+        "detail": "File size must be less than 7MB"
+      },
+      "error": null,
+      "response_time_ms": 192.62
+    },
+    {
+      "name": "Upload 8MB Audio File",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 413,
+      "actual_status": 413,
+      "success": true,
+      "response": "<html>\r\n<head><title>413 Request Entity Too Large</title></head>\r\n<body>\r\n<center><h1>413 Request Entity Too Large</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n",
+      "error": null,
+      "response_time_ms": 31.06
+    },
+    {
+      "name": "Upload 10MB Audio File",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 413,
+      "actual_status": 413,
+      "success": true,
+      "response": "<html>\r\n<head><title>413 Request Entity Too Large</title></head>\r\n<body>\r\n<center><h1>413 Request Entity Too Large</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n",
+      "error": null,
+      "response_time_ms": 36.08
+    },
+    {
+      "name": "Upload 6.9MB Audio File",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response": {
+        "message": "File uploaded successfully",
+        "file_id": "a0659518-ec82-4065-9ee6-ec656dded9cd",
+        "title": "Test Audio 6.9MB 1748762610",
+        "file_size": 7235218
+      },
+      "error": null,
+      "response_time_ms": 188.28
+    },
+    {
+      "name": "Upload 6.91MB Audio File",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response": {
+        "message": "File uploaded successfully",
+        "file_id": "44c18625-4d17-4f38-8559-440f4fac862c",
+        "title": "Test Audio 6.91MB 1748762610",
+        "file_size": 7245704
+      },
+      "error": null,
+      "response_time_ms": 123.28
+    },
+    {
+      "name": "Upload 6.92MB Audio File",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response": {
+        "message": "File uploaded successfully",
+        "file_id": "aed82508-5f42-43f7-84a4-daf3c0849aa6",
+        "title": "Test Audio 6.92MB 1748762610",
+        "file_size": 7256188
+      },
+      "error": null,
+      "response_time_ms": 113.26
+    },
+    {
+      "name": "Upload 6.93MB Audio File",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response": {
+        "message": "File uploaded successfully",
+        "file_id": "92b6c2e2-3d1f-43aa-9c4f-3858a7d6b5af",
+        "title": "Test Audio 6.93MB 1748762610",
+        "file_size": 7266674
+      },
+      "error": null,
+      "response_time_ms": 222.58
+    },
+    {
+      "name": "Upload 6.94MB Audio File",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response": {
+        "message": "File uploaded successfully",
+        "file_id": "1ffac870-611d-47ff-aa74-7838b1129886",
+        "title": "Test Audio 6.94MB 1748762611",
+        "file_size": 7277160
+      },
+      "error": null,
+      "response_time_ms": 109.73
+    },
+    {
+      "name": "Upload 6.95MB Audio File",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response": {
+        "message": "File uploaded successfully",
+        "file_id": "2f7151e1-e3a5-4b81-b0fa-64138b9723f4",
+        "title": "Test Audio 6.95MB 1748762611",
+        "file_size": 7287646
+      },
+      "error": null,
+      "response_time_ms": 162.34
+    },
+    {
+      "name": "Upload 6.96MB Audio File",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response": {
+        "message": "File uploaded successfully",
+        "file_id": "defe6212-50d5-4cda-b72c-0fb49c6846c2",
+        "title": "Test Audio 6.96MB 1748762611",
+        "file_size": 7298132
+      },
+      "error": null,
+      "response_time_ms": 136.29
+    },
+    {
+      "name": "Upload 6.97MB Audio File",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response": {
+        "message": "File uploaded successfully",
+        "file_id": "b23b08a8-d318-4d57-b978-11fed18d17c3",
+        "title": "Test Audio 6.97MB 1748762611",
+        "file_size": 7308618
+      },
+      "error": null,
+      "response_time_ms": 108.93
+    },
+    {
+      "name": "Upload 6.98MB Audio File",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response": {
+        "message": "File uploaded successfully",
+        "file_id": "4e202583-49c7-452d-bc60-ca162c0ac547",
+        "title": "Test Audio 6.98MB 1748762611",
+        "file_size": 7319104
+      },
+      "error": null,
+      "response_time_ms": 160.68
+    },
+    {
+      "name": "Upload 6.99MB Audio File",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response": {
+        "message": "File uploaded successfully",
+        "file_id": "50121048-3138-467e-8dfc-e3f0e9584126",
+        "title": "Test Audio 6.99MB 1748762612",
+        "file_size": 7329590
+      },
+      "error": null,
+      "response_time_ms": 113.7
+    },
+    {
+      "name": "Upload 7.0MB Audio File",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 200,
+      "actual_status": 413,
+      "success": false,
+      "response": {
+        "detail": "File size must be less than 7MB"
+      },
+      "error": "File size must be less than 7MB",
+      "response_time_ms": 157.36
+    },
+    {
+      "name": "Upload 8MB Audio File",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 413,
+      "actual_status": 413,
+      "success": true,
+      "response": "<html>\r\n<head><title>413 Request Entity Too Large</title></head>\r\n<body>\r\n<center><h1>413 Request Entity Too Large</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n",
+      "error": null,
+      "response_time_ms": 78.73
+    },
+    {
+      "name": "Upload 10MB Audio File",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 413,
+      "actual_status": 413,
+      "success": true,
+      "response": "<html>\r\n<head><title>413 Request Entity Too Large</title></head>\r\n<body>\r\n<center><h1>413 Request Entity Too Large</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n",
+      "error": null,
+      "response_time_ms": 34.0
+    },
+    {
+      "name": "Upload 15MB Audio File",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 413,
+      "actual_status": 413,
+      "success": true,
+      "response": "<html>\r\n<head><title>413 Request Entity Too Large</title></head>\r\n<body>\r\n<center><h1>413 Request Entity Too Large</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n",
+      "error": null,
+      "response_time_ms": 49.96
+    }
+  ],
+  "summary": {
+    "exact_boundary_mb": 6.99,
+    "tests_run": 23,
+    "tests_passed": 21
+  }
+}
