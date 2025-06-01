@@ -74,14 +74,18 @@ async def upload_audio(
         if not file.filename.endswith('.wav'):
             raise HTTPException(status_code=400, detail="Only WAV files are supported")
         
-        # Read file content in chunks to handle large files
-        file_content = bytearray()
-        max_size = 100 * 1024 * 1024  # 100MB
+        # Check file size using file.file which is available in FastAPI
+        file.file.seek(0, 2)  # Seek to end of file
+        file_size = file.file.tell()  # Get file size
+        file.file.seek(0)  # Reset to beginning
         
-        async for chunk in file.stream():
-            if len(file_content) + len(chunk) > max_size:
-                raise HTTPException(status_code=413, detail="File size must be less than 100MB")
-            file_content.extend(chunk)
+        # Validate file size (100MB limit)
+        max_size = 100 * 1024 * 1024  # 100MB
+        if file_size > max_size:
+            raise HTTPException(status_code=413, detail="File size must be less than 100MB")
+        
+        # Read file content
+        file_content = await file.read()
         
         # Generate unique filename
         file_id = str(uuid.uuid4())
@@ -100,7 +104,7 @@ async def upload_audio(
             "original_filename": file.filename,
             "title": title,
             "category": category,
-            "file_size": len(file_content),
+            "file_size": file_size,
             "uploaded_at": datetime.utcnow(),
             "file_path": str(file_path)
         }
@@ -108,7 +112,7 @@ async def upload_audio(
         # Save to database
         await db.audio_files.insert_one(audio_record)
         
-        return {"message": "File uploaded successfully", "file_id": file_id, "title": title, "file_size": len(file_content)}
+        return {"message": "File uploaded successfully", "file_id": file_id, "title": title, "file_size": file_size}
     
     except HTTPException:
         # Re-raise HTTP exceptions
