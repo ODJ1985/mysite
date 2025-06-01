@@ -150,7 +150,7 @@ class PodcastAppTester:
                 'category': self.category_name
             }
             
-            expected_status = 200 if size_mb <= 50 else 413
+            expected_status = 200 if size_mb <= 25 else 413
             success, response = self.run_test(
                 f"Upload {size_mb}MB Audio File",
                 "POST",
