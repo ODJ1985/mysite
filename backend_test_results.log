@@ -34,3 +34,61 @@ Response: <html>
 </html>
 
 Failed to upload 99MB audio file: Unknown error
+
+🔍 Testing Upload 100MB Audio File...
+❌ Failed - Expected 200, got 413
+Response: <html>
+<head><title>413 Request Entity Too Large</title></head>
+<body>
+<center><h1>413 Request Entity Too Large</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>
+
+Failed to upload 100MB audio file: Unknown error
+
+🔍 Testing Upload 101MB Audio File...
+❌ Failed - Expected 400, got 413
+Response: <html>
+<head><title>413 Request Entity Too Large</title></head>
+<body>
+<center><h1>413 Request Entity Too Large</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>
+
+Failed to upload 101MB audio file: Unknown error
+
+🔍 Testing Get Audio Files...
+✅ Passed - Status: 200
+Found 10 audio files
+  - Test Audio 5MB (Test Category 153158)
+  - Test Audio 1MB (Test Category 153158)
+  - Test Audio 5MB (Test Category 153158)
+  - Test Audio 1MB (Test Category 153158)
+  - Test Audio 5MB (Test Category 153158)
+  ... and 5 more
+
+🔍 Testing Get Audio Files for category: Test Category 153158...
+✅ Passed - Status: 200
+Found 8 audio files
+  - Test Audio 5MB (Test Category 153158)
+  - Test Audio 1MB (Test Category 153158)
+  - Test Audio 5MB (Test Category 153158)
+  - Test Audio 1MB (Test Category 153158)
+  - Test Audio 5MB (Test Category 153158)
+  ... and 3 more
+
+🔍 Testing Get Audio File 145bffd5-c6be-4cc6-8d7a-58eafaafd52c...
+✅ Passed - Status: 200
+Audio file details: Test Audio 5MB
+
+🔍 Testing Audio Stream for file 145bffd5-c6be-4cc6-8d7a-58eafaafd52c...
+✅ Passed - Status: 200, Content-Type: audio/wav
+Successfully read 1024 bytes from audio stream
+
+==================================================
+📊 API TEST SUMMARY: 8/11 tests passed
+==================================================
+❌ 3 tests failed
+==================================================
