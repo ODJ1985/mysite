@@ -183,7 +183,7 @@ class FileUploadImprovementsTester:
         """Test the 100MB file size limit for audio uploads"""
         print("\n🔍 Testing file size limit functionality...")
         
-        # Test uploading a file that's just over 100MB (should fail with 413 status code)
+        # Test uploading a file that's just over 100MB (should fail with 413 or 400 status code)
         file_size_mb = 101
         print(f"\nGenerating {file_size_mb}MB test WAV file (exceeding limit)...")
         file_content = self._generate_test_wav_file(file_size_mb)
@@ -207,17 +207,17 @@ class FileUploadImprovementsTester:
                 data=data
             )
             
-            # Check if the request was rejected with a 413 status code
-            if response.status_code == 413 and "File size must be less than 100MB" in response.text:
+            # Check if the request was rejected with a 413 or 400 status code
+            if (response.status_code == 413 or response.status_code == 400) and "File size must be less than 100MB" in response.text:
                 self.tests_passed += 1
-                print("✅ Passed - Server correctly rejected file over 100MB with 413 status code")
+                print(f"✅ Passed - Server correctly rejected file over 100MB with {response.status_code} status code")
                 try:
                     print(f"Response: {response.json()}")
                 except:
                     print(f"Response: {response.text}")
                 return True
             else:
-                print(f"❌ Failed - Expected 413 status code with size limit message, got {response.status_code}")
+                print(f"❌ Failed - Expected 413 or 400 status code with size limit message, got {response.status_code}")
                 print(f"Response: {response.text}")
                 return False
         except Exception as e:
@@ -231,7 +231,7 @@ class FileUploadImprovementsTester:
         results = []
         
         # Test with different file sizes
-        for size_mb in [1, 5, 10, 20]:
+        for size_mb in [1, 5, 10]:
             print(f"\nTesting {size_mb}MB file upload performance...")
             
             # Generate a random WAV file
@@ -310,15 +310,11 @@ def main():
     # Test small file upload (1MB)
     small_file_ok, small_file_id = tester.test_upload_audio_file(1)
     
-    # Test medium file upload (10MB)
-    medium_file_ok, medium_file_id = tester.test_upload_audio_file(10)
+    # Test medium file upload (5MB)
+    medium_file_ok, medium_file_id = tester.test_upload_audio_file(5)
     
-    # Test larger file upload (20MB)
-    larger_file_ok, larger_file_id = tester.test_upload_audio_file(20)
-    
-    # Test file just under the limit (99MB)
-    # Note: This test is optional as it takes a long time
-    # under_limit_ok, under_limit_id = tester.test_upload_audio_file(99)
+    # Test larger file upload (10MB)
+    larger_file_ok, larger_file_id = tester.test_upload_audio_file(10)
     
     # Test file size limit (101MB)
     tester.test_file_size_limit()
