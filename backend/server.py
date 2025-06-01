@@ -63,47 +63,59 @@ async def health_check():
 
 @app.post("/api/upload-audio")
 async def upload_audio(
-    file: UploadFile = File(...),
-    title: str = Form(...),
-    category: str = Form(...)
+    file: UploadFile = File(..., description="WAV audio file (max 100MB)"),
+    title: str = Form(..., description="Audio title"),
+    category: str = Form(..., description="Audio category")
 ):
     """Upload a WAV audio file"""
     
-    # Validate file type
-    if not file.filename.endswith('.wav'):
-        raise HTTPException(status_code=400, detail="Only WAV files are supported")
+    try:
+        # Validate file type
+        if not file.filename.endswith('.wav'):
+            raise HTTPException(status_code=400, detail="Only WAV files are supported")
+        
+        # Read file content in chunks to handle large files
+        file_content = bytearray()
+        max_size = 100 * 1024 * 1024  # 100MB
+        
+        async for chunk in file.stream():
+            if len(file_content) + len(chunk) > max_size:
+                raise HTTPException(status_code=413, detail="File size must be less than 100MB")
+            file_content.extend(chunk)
+        
+        # Generate unique filename
+        file_id = str(uuid.uuid4())
+        file_extension = ".wav"
+        filename = f"{file_id}{file_extension}"
+        file_path = uploads_dir / filename
+        
+        # Save file
+        with open(file_path, "wb") as buffer:
+            buffer.write(file_content)
+        
+        # Create audio file record
+        audio_record = {
+            "id": file_id,
+            "filename": filename,
+            "original_filename": file.filename,
+            "title": title,
+            "category": category,
+            "file_size": len(file_content),
+            "uploaded_at": datetime.utcnow(),
+            "file_path": str(file_path)
+        }
+        
+        # Save to database
+        await db.audio_files.insert_one(audio_record)
+        
+        return {"message": "File uploaded successfully", "file_id": file_id, "title": title, "file_size": len(file_content)}
     
-    # Validate file size (100MB limit)
-    file_content = await file.read()
-    if len(file_content) > 100 * 1024 * 1024:  # 100MB
-        raise HTTPException(status_code=400, detail="File size must be less than 100MB")
-    
-    # Generate unique filename
-    file_id = str(uuid.uuid4())
-    file_extension = ".wav"
-    filename = f"{file_id}{file_extension}"
-    file_path = uploads_dir / filename
-    
-    # Save file
-    with open(file_path, "wb") as buffer:
-        buffer.write(file_content)
-    
-    # Create audio file record
-    audio_record = {
-        "id": file_id,
-        "filename": filename,
-        "original_filename": file.filename,
-        "title": title,
-        "category": category,
-        "file_size": len(file_content),
-        "uploaded_at": datetime.utcnow(),
-        "file_path": str(file_path)
-    }
-    
-    # Save to database
-    await db.audio_files.insert_one(audio_record)
-    
-    return {"message": "File uploaded successfully", "file_id": file_id, "title": title}
+    except HTTPException:
+        # Re-raise HTTP exceptions
+        raise
+    except Exception as e:
+        # Handle any other errors
+        raise HTTPException(status_code=500, detail=f"Upload failed: {str(e)}")
 
 @app.get("/api/audio-files")
 async def get_audio_files(category: Optional[str] = None):
