@@ -119,16 +119,16 @@ backend:
 
 frontend:
   - task: "PWA Icon Implementation for iPhone Home Screen"
-    implemented: false
-    working: false
-    file: "index.html, manifest.json"
+    implemented: true
+    working: true
+    file: "index.html, manifest.json, wyebiya-icon-new.svg"
     stuck_count: 0
     priority: "high"
     needs_retesting: true
     status_history:
-        - working: false
+        - working: true
           agent: "main"
-          comment: "iPhoneホーム画面アイコン表示機能を実装予定。ユーザー提供のWYEBIYAロゴを使用する。"
+          comment: "iPhoneホーム画面アイコン表示機能を実装完了。新しいWYEBIYAロゴ（金色、和風デザイン、マイク付き）をPWAアイコンとして設定。manifest.json、index.html、SVGアイコンファイルを更新。"
 
 metadata:
   created_by: "main_agent"
