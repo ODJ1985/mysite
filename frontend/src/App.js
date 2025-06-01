@@ -215,6 +215,8 @@ function App() {
       alert('カテゴリの削除に失敗しました');
     }
   };
+  // Delete audio file
+  const deleteAudioFile = async (fileId) => {
     if (!window.confirm('この音声ファイルを削除してもよろしいですか？')) {
       return;
     }
