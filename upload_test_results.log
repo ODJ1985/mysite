@@ -1,0 +1,76 @@
+
+🚀 Starting File Upload Improvements Tests...
+
+🔍 Testing Get Categories...
+✅ Passed - Status: 200
+Using existing category: Test Category 153158
+Generating 1MB test WAV file...
+
+🔍 Testing Upload 1MB Audio File...
+❌ Failed - Expected 200, got 500
+Response: {"detail":"Upload failed: 'UploadFile' object has no attribute 'stream'"}
+Failed to upload 1MB audio file: Upload failed: 'UploadFile' object has no attribute 'stream'
+Generating 5MB test WAV file...
+
+🔍 Testing Upload 5MB Audio File...
+❌ Failed - Expected 200, got 500
+Response: {"detail":"Upload failed: 'UploadFile' object has no attribute 'stream'"}
+Failed to upload 5MB audio file: Upload failed: 'UploadFile' object has no attribute 'stream'
+Generating 10MB test WAV file...
+
+🔍 Testing Upload 10MB Audio File...
+❌ Failed - Expected 200, got 413
+Response: <html>
+<head><title>413 Request Entity Too Large</title></head>
+<body>
+<center><h1>413 Request Entity Too Large</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>
+
+Failed to upload 10MB audio file: Unknown error
+
+🔍 Testing file size limit functionality...
+
+Generating 101MB test WAV file (exceeding limit)...
+
+🔍 Testing Upload of file exceeding 100MB limit...
+❌ Failed - Expected 413 or 400 status code with size limit message, got 413
+Response: <html>
+<head><title>413 Request Entity Too Large</title></head>
+<body>
+<center><h1>413 Request Entity Too Large</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>
+
+
+🔍 Testing upload performance with different file sizes...
+
+Testing 1MB file upload performance...
+🔍 Uploading 1MB file...
+❌ Failed - Upload failed with status code 500
+Response: {"detail":"Upload failed: 'UploadFile' object has no attribute 'stream'"}
+
+Testing 5MB file upload performance...
+🔍 Uploading 5MB file...
+❌ Failed - Upload failed with status code 500
+Response: {"detail":"Upload failed: 'UploadFile' object has no attribute 'stream'"}
+
+Testing 10MB file upload performance...
+🔍 Uploading 10MB file...
+❌ Failed - Upload failed with status code 413
+Response: <html>
+<head><title>413 Request Entity Too Large</title></head>
+<body>
+<center><h1>413 Request Entity Too Large</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>
+
+
+==================================================
+📊 FILE UPLOAD IMPROVEMENTS TEST SUMMARY: 1/8 tests passed
+==================================================
+❌ 7 tests failed
+==================================================
