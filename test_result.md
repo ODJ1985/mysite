@@ -124,14 +124,14 @@ frontend:
   - task: "PWA Icon Implementation for iPhone Home Screen"
     implemented: true
     working: true
-    file: "index.html, manifest.json, wyebiya-original-logo.png"
+    file: "index.html, manifest.json, apple-touch-icon-180x180.png"
     stuck_count: 0
     priority: "high"
     needs_retesting: false
     status_history:
         - working: true
           agent: "main"
-          comment: "iPhoneホーム画面アイコン表示機能を実装完了。ユーザー提供のオリジナルWYEBIYAロゴ（wyebiya-original-logo.png）をPWAアイコンとして設定。manifest.json、index.htmlを更新し、Apple Touch Iconとしてオリジナルロゴを使用。"
+          comment: "iPhoneホーム画面アイコン表示機能を実装完了。ユーザー提供のオリジナルWYEBIYAロゴを最適化（1024x1024 2.1MB → 180x180 40KB）。Apple Touch Icon複数サイズ対応（180x180, 152x152, 120x120）。precomposed属性追加でiOS互換性向上。キャッシュバスティングv7適用。"
 
 metadata:
   created_by: "main_agent"
