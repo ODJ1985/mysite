@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#B8860B;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#DAA520;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="512" height="512" fill="#2B1810" rx="20"/>
+  
+  <!-- Main frame -->
+  <rect x="40" y="40" width="432" height="432" fill="none" stroke="url(#goldGradient)" stroke-width="6" rx="10"/>
+  
+  <!-- Corner decorations -->
+  <!-- Top left -->
+  <g stroke="url(#goldGradient)" stroke-width="3" fill="none">
+    <path d="M60 60 L60 90 M60 60 L90 60"/>
+    <path d="M70 70 L70 80 M70 70 L80 70"/>
+  </g>
+  
+  <!-- Top right -->
+  <g stroke="url(#goldGradient)" stroke-width="3" fill="none">
+    <path d="M452 60 L452 90 M452 60 L422 60"/>
+    <path d="M442 70 L442 80 M442 70 L432 70"/>
+  </g>
+  
+  <!-- Bottom left -->
+  <g stroke="url(#goldGradient)" stroke-width="3" fill="none">
+    <path d="M60 452 L60 422 M60 452 L90 452"/>
+    <path d="M70 442 L70 432 M70 442 L80 442"/>
+  </g>
+  
+  <!-- Bottom right -->
+  <g stroke="url(#goldGradient)" stroke-width="3" fill="none">
+    <path d="M452 452 L452 422 M452 452 L422 452"/>
+    <path d="M442 442 L442 432 M442 442 L432 442"/>
+  </g>
+  
+  <!-- Microphone and headphones icon -->
+  <g fill="url(#goldGradient)" transform="translate(176, 120)">
+    <!-- Microphone body -->
+    <ellipse cx="80" cy="60" rx="25" ry="40"/>
+    <!-- Microphone stand -->
+    <rect x="75" y="100" width="10" height="40"/>
+    <!-- Base -->
+    <ellipse cx="80" cy="145" rx="30" ry="8"/>
+    <!-- Headphones -->
+    <path d="M45 45 Q45 25 65 25 Q80 25 80 40 Q80 25 95 25 Q115 25 115 45" stroke="url(#goldGradient)" stroke-width="8" fill="none"/>
+    <!-- Headphone pads -->
+    <ellipse cx="50" cy="50" rx="12" ry="18"/>
+    <ellipse cx="110" cy="50" rx="12" ry="18"/>
+  </g>
+  
+  <!-- Japanese characters 和風 -->
+  <g fill="url(#goldGradient)" font-family="serif" font-size="64" font-weight="bold">
+    <text x="340" y="200" text-anchor="middle">和</text>
+    <text x="340" y="280" text-anchor="middle">風</text>
+  </g>
+  
+  <!-- WYEBIYA text -->
+  <text x="256" y="420" text-anchor="middle" fill="url(#goldGradient)" font-family="serif" font-size="48" font-weight="bold" letter-spacing="4">WYEBIYA</text>
+</svg>
