@@ -101,3 +101,48 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: "iPhoneのホーム画面にブランドロゴを表示する機能を実装。ユーザーが提供した金色のWYEBIYAロゴを使用して、PWAアプリアイコンとして設定する必要がある。"
+
+backend:
+  - task: "Audio File Management API"
+    implemented: true
+    working: true
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "main"
+          comment: "既存のFastAPI音声ファイル管理システムが動作中"
+
+frontend:
+  - task: "PWA Icon Implementation for iPhone Home Screen"
+    implemented: false
+    working: false
+    file: "index.html, manifest.json"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: false
+          agent: "main"
+          comment: "iPhoneホーム画面アイコン表示機能を実装予定。ユーザー提供のWYEBIYAロゴを使用する。"
+
+metadata:
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 0
+  run_ui: false
+
+test_plan:
+  current_focus:
+    - "PWA Icon Implementation for iPhone Home Screen"
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
+agent_communication:
+    - agent: "main"
+      message: "iPhoneホーム画面アイコン表示機能の実装を開始。ユーザー提供のWYEBIYAロゴを適切なPWAアイコンとして設定する。"
