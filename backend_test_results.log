@@ -61,29 +61,29 @@ Failed to upload 101MB audio file: Unknown error
 
 🔍 Testing Get Audio Files...
 ✅ Passed - Status: 200
-Found 10 audio files
+Found 14 audio files
   - Test Audio 5MB (Test Category 153158)
   - Test Audio 1MB (Test Category 153158)
   - Test Audio 5MB (Test Category 153158)
   - Test Audio 1MB (Test Category 153158)
   - Test Audio 5MB (Test Category 153158)
-  ... and 5 more
+  ... and 9 more
 
 🔍 Testing Get Audio Files for category: Test Category 153158...
 ✅ Passed - Status: 200
-Found 8 audio files
+Found 12 audio files
   - Test Audio 5MB (Test Category 153158)
   - Test Audio 1MB (Test Category 153158)
   - Test Audio 5MB (Test Category 153158)
   - Test Audio 1MB (Test Category 153158)
   - Test Audio 5MB (Test Category 153158)
-  ... and 3 more
+  ... and 7 more
 
-🔍 Testing Get Audio File 145bffd5-c6be-4cc6-8d7a-58eafaafd52c...
+🔍 Testing Get Audio File 27175e60-6d26-4966-ad3c-46282ac0ea5a...
 ✅ Passed - Status: 200
 Audio file details: Test Audio 5MB
 
-🔍 Testing Audio Stream for file 145bffd5-c6be-4cc6-8d7a-58eafaafd52c...
+🔍 Testing Audio Stream for file 27175e60-6d26-4966-ad3c-46282ac0ea5a...
 ✅ Passed - Status: 200, Content-Type: audio/wav
 Successfully read 1024 bytes from audio stream
 
