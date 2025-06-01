@@ -220,12 +220,15 @@ function App() {
         }
       }
       
-      setUploadModalOpen(false);
-      fetchAudioFiles(selectedCategory);
-      e.target.reset();
-      
-      const sizeText = (fileSize / (1024 * 1024)).toFixed(1);
-      alert(`音声ファイル（${sizeText}MB）が正常にアップロードされました！`);
+      // Success handling
+      if (response) {
+        setUploadModalOpen(false);
+        fetchAudioFiles(selectedCategory);
+        e.target.reset();
+        
+        const sizeText = (fileSize / (1024 * 1024)).toFixed(1);
+        alert(`音声ファイル（${sizeText}MB）が正常にアップロードされました！`);
+      }
       
     } catch (error) {
       console.error('Upload error:', error);
