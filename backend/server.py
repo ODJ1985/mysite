@@ -79,10 +79,10 @@ async def upload_audio(
         file_size = file.file.tell()  # Get file size
         file.file.seek(0)  # Reset to beginning
         
-        # Validate file size (50MB limit)
-        max_size = 50 * 1024 * 1024  # 50MB
+        # Validate file size (25MB limit)
+        max_size = 25 * 1024 * 1024  # 25MB
         if file_size > max_size:
-            raise HTTPException(status_code=413, detail="File size must be less than 50MB")
+            raise HTTPException(status_code=413, detail="File size must be less than 25MB")
         
         # Read file content
         file_content = await file.read()
