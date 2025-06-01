@@ -103,7 +103,7 @@ def test_upload_large_file(base_url, file_path, file_size_mb):
         return False
 
 def main():
-    base_url = "https://9fe0c2b0-7831-40b8-a607-5c9b24890339.preview.emergentagent.com"
+    base_url = "https://69b0f385-191d-4d9c-8f85-af6b574a2e14.preview.emergentagent.com"
     
     print("\n===== Testing Large File Upload (49MB) =====\n")
     

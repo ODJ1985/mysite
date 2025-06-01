@@ -382,7 +382,7 @@ class PodcastAPITester:
 
 def main():
     # Get backend URL from environment or use the one from frontend/.env
-    backend_url = "https://9fe0c2b0-7831-40b8-a607-5c9b24890339.preview.emergentagent.com"
+    backend_url = "https://69b0f385-191d-4d9c-8f85-af6b574a2e14.preview.emergentagent.com"
     
     print(f"🚀 Starting Comprehensive Podcast API Tests against {backend_url}")
     tester = PodcastAPITester(backend_url)

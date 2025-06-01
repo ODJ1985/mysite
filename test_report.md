@@ -5,7 +5,7 @@
 wyEBIYA Podcastアプリケーションの25MB制限とNginx設定調整後の完全テストを実施しました。
 
 **テスト日時**: 2025年6月1日
-**テスト環境**: 本番プレビュー環境 (https://9fe0c2b0-7831-40b8-a607-5c9b24890339.preview.emergentagent.com)
+**テスト環境**: 本番プレビュー環境 (https://69b0f385-191d-4d9c-8f85-af6b574a2e14.preview.emergentagent.com)
 
 ## テスト結果サマリー
 
