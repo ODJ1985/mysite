@@ -148,17 +148,17 @@ frontend:
           agent: "main"
           comment: "音声アップロード機能の動作確認。バックエンドテストでは正常動作確認済み（通常アップロード・分割アップロード両方対応）。プレビューボタンを削除済み。フロントエンドコードも正常。ユーザー報告の問題要調査。"
 
-  - task: "Remove Preview Function"
+  - task: "Deploy Issue Resolution"
     implemented: true
     working: true
-    file: "App.js, preview.html"
+    file: "requirements.txt"
     stuck_count: 0
-    priority: "medium"
+    priority: "high"
     needs_retesting: false
     status_history:
         - working: true
           agent: "main"
-          comment: "不要なプレビュー機能を削除完了。プレビューボタンをヘッダーから削除、preview.htmlファイルも削除。UIがよりシンプルになりました。"
+          comment: "「Building Package...」で止まるデプロイ問題を解決。原因はPillowライブラリの追加によるビルド時間の増大でした。Pillowを一時的に削除し、デプロイ可能な状態に復旧。画像処理機能は代替手段で実装済み（SVGアイコン使用）。"
 
 metadata:
   created_by: "main_agent"
