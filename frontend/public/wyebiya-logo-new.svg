@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#D4AF37;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#FFD700;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#B8860B;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#DAA520;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="frameGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#D4AF37;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#B8860B;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Main dark background -->
+  <rect width="512" height="512" fill="#2D2419" rx="80"/>
+  
+  <!-- Outer decorative frame -->
+  <rect x="30" y="30" width="452" height="452" fill="none" stroke="url(#frameGradient)" stroke-width="12" rx="40"/>
+  
+  <!-- Inner frame -->
+  <rect x="50" y="50" width="412" height="412" fill="none" stroke="url(#frameGradient)" stroke-width="8" rx="30"/>
+  
+  <!-- Corner decorative elements -->
+  <g fill="url(#goldGradient)">
+    <!-- Top left corner ornament -->
+    <rect x="60" y="60" width="30" height="6" rx="3"/>
+    <rect x="60" y="60" width="6" height="30" rx="3"/>
+    <rect x="75" y="75" width="15" height="3" rx="1.5"/>
+    <rect x="75" y="75" width="3" height="15" rx="1.5"/>
+    
+    <!-- Top right corner ornament -->
+    <rect x="422" y="60" width="30" height="6" rx="3"/>
+    <rect x="446" y="60" width="6" height="30" rx="3"/>
+    <rect x="422" y="75" width="15" height="3" rx="1.5"/>
+    <rect x="434" y="75" width="3" height="15" rx="1.5"/>
+    
+    <!-- Bottom left corner ornament -->
+    <rect x="60" y="446" width="30" height="6" rx="3"/>
+    <rect x="60" y="422" width="6" height="30" rx="3"/>
+    <rect x="75" y="422" width="15" height="3" rx="1.5"/>
+    <rect x="75" y="422" width="3" height="15" rx="1.5"/>
+    
+    <!-- Bottom right corner ornament -->
+    <rect x="422" y="446" width="30" height="6" rx="3"/>
+    <rect x="446" y="422" width="6" height="30" rx="3"/>
+    <rect x="422" y="422" width="15" height="3" rx="1.5"/>
+    <rect x="434" y="422" width="3" height="15" rx="1.5"/>
+  </g>
+  
+  <!-- Microphone icon -->
+  <g fill="url(#goldGradient)">
+    <!-- Microphone body -->
+    <ellipse cx="190" cy="200" rx="25" ry="40" />
+    <!-- Microphone stand -->
+    <rect x="185" y="240" width="10" height="40" rx="5"/>
+    <!-- Microphone base -->
+    <ellipse cx="190" cy="285" rx="35" ry="8" />
+    <!-- Microphone grille lines -->
+    <rect x="175" y="180" width="30" height="2" rx="1" fill="#2D2419"/>
+    <rect x="175" y="190" width="30" height="2" rx="1" fill="#2D2419"/>
+    <rect x="175" y="200" width="30" height="2" rx="1" fill="#2D2419"/>
+    <rect x="175" y="210" width="30" height="2" rx="1" fill="#2D2419"/>
+    <rect x="175" y="220" width="30" height="2" rx="1" fill="#2D2419"/>
+  </g>
+  
+  <!-- Headphones around microphone -->
+  <g fill="none" stroke="url(#goldGradient)" stroke-width="8" stroke-linecap="round">
+    <!-- Left headphone -->
+    <path d="M 140 180 Q 120 160 120 200 Q 120 240 140 220"/>
+    <rect x="112" y="190" width="16" height="20" rx="8" fill="url(#goldGradient)"/>
+    
+    <!-- Right headphone -->
+    <path d="M 240 180 Q 260 160 260 200 Q 260 240 240 220"/>
+    <rect x="252" y="190" width="16" height="20" rx="8" fill="url(#goldGradient)"/>
+  </g>
+  
+  <!-- Japanese characters 和風 -->
+  <g fill="url(#goldGradient)" font-family="serif" font-size="60" font-weight="bold">
+    <!-- 和 character -->
+    <text x="320" y="200" text-anchor="middle">和</text>
+    <!-- 風 character -->
+    <text x="320" y="270" text-anchor="middle">風</text>
+  </g>
+  
+  <!-- WYEBIYA text -->
+  <g fill="url(#goldGradient)" font-family="serif" font-size="48" font-weight="bold" letter-spacing="4px">
+    <text x="256" y="380" text-anchor="middle">WYEBIYA</text>
+  </g>
+  
+</svg>
