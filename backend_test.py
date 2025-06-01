@@ -194,19 +194,19 @@ def main():
     print("\n===== Testing File Size Limits =====\n")
     
     # Small file (should succeed)
-    tester.test_upload_audio_file(1)
+    tester.test_upload_audio_file(5)
     
     # Medium file (should succeed)
-    tester.test_upload_audio_file(25)
+    tester.test_upload_audio_file(15)
     
     # Large file within limit (should succeed)
-    tester.test_upload_audio_file(49)
+    tester.test_upload_audio_file(24)
     
     # File at exact limit (should succeed)
-    tester.test_upload_audio_file(50)
+    tester.test_upload_audio_file(25)
     
     # File exceeding limit (should fail with 413)
-    tester.test_upload_audio_file(51)
+    tester.test_upload_audio_file(26)
     
     # Get audio files after uploads
     tester.test_get_audio_files()
