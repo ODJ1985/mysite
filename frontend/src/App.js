@@ -241,6 +241,27 @@ function App() {
       alert('音声ファイルの削除に失敗しました');
     }
   };
+    
+    try {
+      const response = await fetch(`${backendUrl}/api/audio-file/${fileId}`, {
+        method: 'DELETE',
+      });
+      
+      if (response.ok) {
+        fetchAudioFiles(selectedCategory);
+        if (currentAudio && currentAudio.id === fileId) {
+          setCurrentAudio(null);
+          setIsPlaying(false);
+        }
+        alert('音声ファイルが正常に削除されました！');
+      } else {
+        alert('音声ファイルの削除に失敗しました');
+      }
+    } catch (error) {
+      console.error('Delete error:', error);
+      alert('音声ファイルの削除に失敗しました');
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-200 text-gray-700">
