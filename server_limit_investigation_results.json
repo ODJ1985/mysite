@@ -1,0 +1,256 @@
+{
+  "timestamp": "2025-06-01T07:28:53.913228",
+  "tests": [
+    {
+      "name": "Create Category",
+      "method": "POST",
+      "endpoint": "categories",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response": {
+        "message": "Category created successfully",
+        "category_id": "75d897bd-1b1e-4434-a213-b99361e64dfa"
+      },
+      "error": null,
+      "response_time_ms": 95.66
+    },
+    {
+      "name": "Health Check",
+      "method": "GET",
+      "endpoint": "health",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response": {
+        "status": "healthy",
+        "service": "wyEBIYA-podcast-service"
+      },
+      "error": null,
+      "response_time_ms": 38.35,
+      "timeout": 30
+    },
+    {
+      "name": "Upload 6.9MB Audio File (Timeout: 60s)",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response": {
+        "message": "File uploaded successfully",
+        "file_id": "c762d8c2-cc92-47b2-91fc-fccc2e2fdad1",
+        "title": "Test Audio 6.9MB 1748762934",
+        "file_size": 7235218
+      },
+      "error": null,
+      "response_time_ms": 198.23,
+      "timeout": 60
+    },
+    {
+      "name": "Upload 7.1MB Audio File (Timeout: 60s)",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response": {
+        "message": "File uploaded successfully",
+        "file_id": "c1559a6e-0f4c-4c1f-9dd0-37ffef14af07",
+        "title": "Test Audio 7.1MB 1748762934",
+        "file_size": 7444932
+      },
+      "error": null,
+      "response_time_ms": 251.32,
+      "timeout": 60
+    },
+    {
+      "name": "Upload 8MB Audio File (Timeout: 60s)",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 200,
+      "actual_status": 413,
+      "success": true,
+      "response": "<html>\r\n<head><title>413 Request Entity Too Large</title></head>\r\n<body>\r\n<center><h1>413 Request Entity Too Large</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n",
+      "error": null,
+      "response_time_ms": 54.13,
+      "timeout": 60
+    },
+    {
+      "name": "Upload 10MB Audio File (Timeout: 60s)",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 200,
+      "actual_status": 413,
+      "success": true,
+      "response": "<html>\r\n<head><title>413 Request Entity Too Large</title></head>\r\n<body>\r\n<center><h1>413 Request Entity Too Large</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n",
+      "error": null,
+      "response_time_ms": 42.31,
+      "timeout": 60
+    },
+    {
+      "name": "Create Category",
+      "method": "POST",
+      "endpoint": "categories",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response": {
+        "message": "Category created successfully",
+        "category_id": "c72820ab-6eda-4859-b72a-9a8772e60082"
+      },
+      "error": null,
+      "response_time_ms": 78.31
+    },
+    {
+      "name": "Upload 7.1MB Audio File (Timeout: 60s)",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response": {
+        "message": "File uploaded successfully",
+        "file_id": "14e23f6b-15ed-444d-b2b6-2a022e32d028",
+        "title": "Test Audio 7.1MB 1748762942",
+        "file_size": 7444932
+      },
+      "error": null,
+      "response_time_ms": 255.0,
+      "timeout": 60
+    },
+    {
+      "name": "Upload 8MB Audio File (Timeout: 60s)",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 200,
+      "actual_status": 413,
+      "success": true,
+      "response": "<html>\r\n<head><title>413 Request Entity Too Large</title></head>\r\n<body>\r\n<center><h1>413 Request Entity Too Large</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n",
+      "error": null,
+      "response_time_ms": 84.52,
+      "timeout": 60
+    },
+    {
+      "name": "Upload 10MB Audio File (Timeout: 60s)",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 200,
+      "actual_status": 413,
+      "success": true,
+      "response": "<html>\r\n<head><title>413 Request Entity Too Large</title></head>\r\n<body>\r\n<center><h1>413 Request Entity Too Large</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n",
+      "error": null,
+      "response_time_ms": 91.2,
+      "timeout": 60
+    },
+    {
+      "name": "Create Category",
+      "method": "POST",
+      "endpoint": "categories",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response": {
+        "message": "Category created successfully",
+        "category_id": "126d6f34-328b-45f3-9d0f-a6a12391e489"
+      },
+      "error": null,
+      "response_time_ms": 152.68
+    },
+    {
+      "name": "Upload 7.1MB Audio File (Timeout: 60s)",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response": {
+        "message": "File uploaded successfully",
+        "file_id": "1b5c188b-a4fa-49ce-9500-0adc1cb096f5",
+        "title": "Test Audio 7.1MB 1748762950",
+        "file_size": 7444932
+      },
+      "error": null,
+      "response_time_ms": 181.32,
+      "timeout": 60
+    },
+    {
+      "name": "Upload 9.9MB Audio File (Timeout: 60s)",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 200,
+      "actual_status": 413,
+      "success": true,
+      "response": "<html>\r\n<head><title>413 Request Entity Too Large</title></head>\r\n<body>\r\n<center><h1>413 Request Entity Too Large</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n",
+      "error": null,
+      "response_time_ms": 99.45,
+      "timeout": 60
+    },
+    {
+      "name": "Upload 10.1MB Audio File (Timeout: 60s)",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 200,
+      "actual_status": 413,
+      "success": true,
+      "response": "<html>\r\n<head><title>413 Request Entity Too Large</title></head>\r\n<body>\r\n<center><h1>413 Request Entity Too Large</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n",
+      "error": null,
+      "response_time_ms": 68.07,
+      "timeout": 60
+    },
+    {
+      "name": "Create Category",
+      "method": "POST",
+      "endpoint": "categories",
+      "expected_status": 200,
+      "actual_status": 200,
+      "success": true,
+      "response": {
+        "message": "Category created successfully",
+        "category_id": "27f2b70d-7080-4f78-af1e-162e12474d80"
+      },
+      "error": null,
+      "response_time_ms": 68.36
+    },
+    {
+      "name": "Upload 10.1MB Audio File (Timeout: 60s)",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 200,
+      "actual_status": 413,
+      "success": true,
+      "response": "<html>\r\n<head><title>413 Request Entity Too Large</title></head>\r\n<body>\r\n<center><h1>413 Request Entity Too Large</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n",
+      "error": null,
+      "response_time_ms": 103.13,
+      "timeout": 60
+    },
+    {
+      "name": "Upload 14.9MB Audio File (Timeout: 60s)",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 200,
+      "actual_status": 413,
+      "success": true,
+      "response": "<html>\r\n<head><title>413 Request Entity Too Large</title></head>\r\n<body>\r\n<center><h1>413 Request Entity Too Large</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n",
+      "error": null,
+      "response_time_ms": 85.28,
+      "timeout": 60
+    },
+    {
+      "name": "Upload 15.1MB Audio File (Timeout: 60s)",
+      "method": "POST",
+      "endpoint": "upload-audio",
+      "expected_status": 200,
+      "actual_status": 413,
+      "success": true,
+      "response": "<html>\r\n<head><title>413 Request Entity Too Large</title></head>\r\n<body>\r\n<center><h1>413 Request Entity Too Large</h1></center>\r\n<hr><center>nginx</center>\r\n</body>\r\n</html>\r\n",
+      "error": null,
+      "response_time_ms": 155.73,
+      "timeout": 60
+    }
+  ],
+  "summary": {
+    "tests_run": 18,
+    "tests_passed": 18
+  }
+}
