@@ -155,15 +155,15 @@ def test_chunked_upload(base_url, file_path, chunk_size=1024*1024):
                 print(f"❌ Chunk {i+1} upload failed with status code {response.status_code}")
                 return False, None
             
-            # For the last chunk, we expect to get a file_id
-            if is_last_chunk:
+            # For the last chunk, we expect to get a file_id and completed=True
+            if i == total_chunks - 1:
                 try:
                     result = response.json()
-                    if "file_id" in result:
+                    if "file_id" in result and result.get("completed", False):
                         print(f"✅ File ID received: {result['file_id']}")
                         return True, result["file_id"]
                     else:
-                        print("❌ No file_id in response for the last chunk")
+                        print("❌ No file_id or completed=False in response for the last chunk")
                         return False, None
                 except json.JSONDecodeError:
                     print("❌ Response for last chunk is not valid JSON")
