@@ -102,23 +102,39 @@ class PodcastAppTester:
     def test_create_category(self):
         """Create a test category"""
         category_name = f"Test Category {int(time.time())}"
-        form_data = {
-            "name": category_name,
-            "color": "#3B82F6"
-        }
         
-        success, response = self.run_test(
-            "Create Category",
-            "POST",
-            "categories",
-            200,
-            form_data=form_data
-        )
-        
-        if success and 'category_id' in response:
-            self.category_id = response['category_id']
-            self.category_name = category_name
-            return True
+        with requests.Session() as session:
+            url = f"{self.base_url}/api/categories"
+            form_data = {
+                "name": category_name,
+                "color": "#3B82F6"
+            }
+            
+            self.tests_run += 1
+            print(f"\n🔍 Testing Create Category...")
+            
+            try:
+                response = session.post(url, data=form_data)
+                
+                success = response.status_code == 200
+                if success:
+                    self.tests_passed += 1
+                    print(f"✅ Passed - Status: {response.status_code}")
+                    response_data = response.json()
+                    if 'category_id' in response_data:
+                        self.category_id = response_data['category_id']
+                        self.category_name = category_name
+                        return True
+                else:
+                    print(f"❌ Failed - Expected 200, got {response.status_code}")
+                    try:
+                        error_detail = response.json().get('detail', 'No detail provided')
+                        print(f"Error detail: {error_detail}")
+                    except:
+                        print("Could not parse error response")
+            except Exception as e:
+                print(f"❌ Failed - Error: {str(e)}")
+                
         return False
 
     def test_get_categories(self):
