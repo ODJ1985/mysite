@@ -188,8 +188,33 @@ function App() {
     }
   };
 
-  // Delete audio file
-  const deleteAudioFile = async (fileId) => {
+  // Delete category functionality
+  const deleteCategory = async (categoryName) => {
+    if (!window.confirm(`カテゴリ「${categoryName}」を削除してもよろしいですか？\n\n注意：このカテゴリに音声ファイルがある場合は削除できません。`)) {
+      return;
+    }
+    
+    try {
+      const response = await fetch(`${backendUrl}/api/categories/${encodeURIComponent(categoryName)}`, {
+        method: 'DELETE',
+      });
+      
+      if (response.ok) {
+        fetchCategories();
+        // If the deleted category was selected, reset to "all"
+        if (selectedCategory === categoryName) {
+          setSelectedCategory('');
+        }
+        alert('カテゴリが正常に削除されました！');
+      } else {
+        const error = await response.json();
+        alert(`カテゴリの削除に失敗しました: ${error.detail}`);
+      }
+    } catch (error) {
+      console.error('Delete category error:', error);
+      alert('カテゴリの削除に失敗しました');
+    }
+  };
     if (!window.confirm('この音声ファイルを削除してもよろしいですか？')) {
       return;
     }
