@@ -123,6 +123,19 @@ function App() {
   const handleFileUpload = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
+    const fileInput = formData.get('file');
+    
+    // Check file size before upload
+    if (fileInput && fileInput.size > 100 * 1024 * 1024) {
+      alert('ファイルサイズが100MBを超えています。より小さなファイルを選択してください。');
+      return;
+    }
+    
+    // Show loading state
+    const submitButton = e.target.querySelector('button[type="submit"]');
+    const originalText = submitButton.textContent;
+    submitButton.textContent = 'アップロード中...';
+    submitButton.disabled = true;
     
     try {
       const response = await fetch(`${backendUrl}/api/upload-audio`, {
@@ -141,7 +154,11 @@ function App() {
       }
     } catch (error) {
       console.error('Upload error:', error);
-      alert('アップロードに失敗しました');
+      alert('アップロードに失敗しました。ネットワーク接続を確認してください。');
+    } finally {
+      // Reset button state
+      submitButton.textContent = originalText;
+      submitButton.disabled = false;
     }
   };
 
