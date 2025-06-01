@@ -4,8 +4,8 @@
   "description": "音声ファイルを美しく管理・再生できるポッドキャストアプリ",
   "icons": [
     {
-      "src": "/wyebiya-icon.png",
-      "sizes": "192x192",
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
       "type": "image/png",
       "purpose": "any maskable"
     },
@@ -18,7 +18,7 @@
   ],
   "start_url": "/",
   "display": "standalone",
-  "theme_color": "#e5e7eb",
+  "theme_color": "#3b82f6",
   "background_color": "#e5e7eb",
   "orientation": "portrait"
 }
