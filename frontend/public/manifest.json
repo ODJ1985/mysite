@@ -1,0 +1,24 @@
+{
+  "short_name": "wyEBIYA",
+  "name": "wyEBIYA Podcast - 和風ポッドキャスト管理",
+  "description": "音声ファイルを美しく管理・再生できるポッドキャストアプリ",
+  "icons": [
+    {
+      "src": "/wyebiya-icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/wyebiya-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#e5e7eb",
+  "background_color": "#e5e7eb",
+  "orientation": "portrait"
+}
