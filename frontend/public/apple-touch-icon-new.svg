@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#DAA520;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#B8860B;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8B7D3A;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="frameGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#DAA520;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#B8860B;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="bgGradient" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" style="stop-color:#3D2F1F;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1A1410;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Main dark background -->
+  <rect width="512" height="512" fill="url(#bgGradient)" rx="80"/>
+  
+  <!-- Outer decorative frame -->
+  <rect x="25" y="25" width="462" height="462" fill="none" stroke="url(#frameGradient)" stroke-width="8" rx="40"/>
+  
+  <!-- Corner decorative elements (Traditional Japanese style) -->
+  <g fill="url(#goldGradient)" stroke="url(#goldGradient)" stroke-width="2">
+    <!-- Top left corner ornament -->
+    <rect x="50" y="50" width="25" height="4" rx="2"/>
+    <rect x="50" y="50" width="4" height="25" rx="2"/>
+    <rect x="60" y="60" width="15" height="2" rx="1"/>
+    <rect x="60" y="60" width="2" height="15" rx="1"/>
+    
+    <!-- Top right corner ornament -->
+    <rect x="437" y="50" width="25" height="4" rx="2"/>
+    <rect x="458" y="50" width="4" height="25" rx="2"/>
+    <rect x="437" y="60" width="15" height="2" rx="1"/>
+    <rect x="450" y="60" width="2" height="15" rx="1"/>
+    
+    <!-- Bottom left corner ornament -->
+    <rect x="50" y="458" width="25" height="4" rx="2"/>
+    <rect x="50" y="437" width="4" height="25" rx="2"/>
+    <rect x="60" y="437" width="15" height="2" rx="1"/>
+    <rect x="60" y="437" width="2" height="15" rx="1"/>
+    
+    <!-- Bottom right corner ornament -->
+    <rect x="437" y="458" width="25" height="4" rx="2"/>
+    <rect x="458" y="437" width="4" height="25" rx="2"/>
+    <rect x="437" y="437" width="15" height="2" rx="1"/>
+    <rect x="450" y="437" width="2" height="15" rx="1"/>
+  </g>
+  
+  <!-- Microphone icon with headphones -->
+  <g fill="url(#goldGradient)">
+    <!-- Microphone body -->
+    <ellipse cx="180" cy="190" rx="22" ry="35" />
+    <!-- Microphone stand -->
+    <rect x="176" y="225" width="8" height="35" rx="4"/>
+    <!-- Microphone base -->
+    <ellipse cx="180" cy="265" rx="30" ry="6" />
+    <!-- Microphone grille lines -->
+    <rect x="168" y="175" width="24" height="1.5" rx="0.75" fill="#2D2419"/>
+    <rect x="168" y="185" width="24" height="1.5" rx="0.75" fill="#2D2419"/>
+    <rect x="168" y="195" width="24" height="1.5" rx="0.75" fill="#2D2419"/>
+    <rect x="168" y="205" width="24" height="1.5" rx="0.75" fill="#2D2419"/>
+  </g>
+  
+  <!-- Headphones around microphone -->
+  <g fill="none" stroke="url(#goldGradient)" stroke-width="6" stroke-linecap="round">
+    <!-- Left headphone arc -->
+    <path d="M 135 175 Q 115 155 115 190 Q 115 225 135 205"/>
+    <rect x="109" y="180" width="12" height="20" rx="6" fill="url(#goldGradient)"/>
+    
+    <!-- Right headphone arc -->
+    <path d="M 225 175 Q 245 155 245 190 Q 245 225 225 205"/>
+    <rect x="239" y="180" width="12" height="20" rx="6" fill="url(#goldGradient)"/>
+    
+    <!-- Headphone band -->
+    <path d="M 135 175 Q 180 140 225 175" stroke-width="4"/>
+  </g>
+  
+  <!-- Japanese characters 和風 (Wafuu - Japanese Style) -->
+  <g fill="url(#goldGradient)" font-family="serif" font-size="48" font-weight="bold">
+    <!-- 和 character (Wa) -->
+    <text x="350" y="190" text-anchor="middle" style="font-family: 'Noto Serif CJK JP', serif;">和</text>
+    <!-- 風 character (Fuu) -->
+    <text x="350" y="250" text-anchor="middle" style="font-family: 'Noto Serif CJK JP', serif;">風</text>
+  </g>
+  
+  <!-- WYEBIYA text -->
+  <g fill="url(#goldGradient)" font-family="serif" font-size="42" font-weight="bold" letter-spacing="3px">
+    <text x="256" y="350" text-anchor="middle" style="font-family: 'Times New Roman', serif;">WYEBIYA</text>
+  </g>
+  
+  <!-- Additional decorative elements -->
+  <g fill="url(#goldGradient)" opacity="0.8">
+    <!-- Small decorative diamonds -->
+    <polygon points="120,120 125,115 130,120 125,125" />
+    <polygon points="382,120 387,115 392,120 387,125" />
+    <polygon points="120,382 125,377 130,382 125,387" />
+    <polygon points="382,382 387,377 392,382 387,387" />
+  </g>
+  
+</svg>
