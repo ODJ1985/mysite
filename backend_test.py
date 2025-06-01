@@ -1,20 +1,24 @@
+
 import requests
-import unittest
-import sys
 import os
-import io
-import random
+import sys
+import time
+import tempfile
+import wave
+import numpy as np
 from datetime import datetime
 
-class PodcastHubAPITester:
-    def __init__(self, base_url="https://9fe0c2b0-7831-40b8-a607-5c9b24890339.preview.emergentagent.com"):
+class PodcastAPITester:
+    def __init__(self, base_url):
         self.base_url = base_url
         self.tests_run = 0
         self.tests_passed = 0
+        self.categories = []
+        self.uploaded_files = []
 
     def run_test(self, name, method, endpoint, expected_status, data=None, files=None):
         """Run a single API test"""
-        url = f"{self.base_url}/{endpoint}"
+        url = f"{self.base_url}/api/{endpoint}"
         headers = {}
         
         self.tests_run += 1
@@ -39,284 +43,274 @@ class PodcastHubAPITester:
             else:
                 print(f"❌ Failed - Expected {expected_status}, got {response.status_code}")
                 try:
-                    print(f"Response: {response.text}")
-                    return False, response.json()
+                    error_detail = response.json().get('detail', 'No detail provided')
+                    print(f"Error detail: {error_detail}")
                 except:
-                    return False, {}
+                    print(f"Response text: {response.text}")
+                return False, {}
 
         except Exception as e:
             print(f"❌ Failed - Error: {str(e)}")
             return False, {}
 
-    def test_health_endpoint(self):
-        """Test the health endpoint"""
+    def test_health_check(self):
+        """Test the health check endpoint"""
         success, response = self.run_test(
-            "Health Endpoint",
+            "Health Check",
             "GET",
-            "api/health",
+            "health",
             200
         )
-        if success:
-            print(f"Health check response: {response}")
         return success
 
+    def test_create_category(self, name, color="#3B82F6"):
+        """Create a category"""
+        success, response = self.run_test(
+            f"Create Category: {name}",
+            "POST",
+            "categories",
+            200,
+            data={"name": name, "color": color}
+        )
+        if success and 'category_id' in response:
+            self.categories.append(name)
+            return response.get('category_id')
+        return None
+
     def test_get_categories(self):
-        """Test getting all categories"""
+        """Get all categories"""
         success, response = self.run_test(
             "Get Categories",
             "GET",
-            "api/categories",
+            "categories",
             200
         )
-        if success:
-            categories = response.get('categories', [])
-            print(f"Found {len(categories)} categories")
-            for category in categories:
-                print(f"  - {category.get('name', 'Unknown')}")
-        return success, response.get('categories', [])
+        if success and 'categories' in response:
+            return response['categories']
+        return []
 
-    def test_create_category(self, name):
-        """Test creating a new category"""
-        success, response = self.run_test(
-            f"Create Category '{name}'",
-            "POST",
-            "api/categories",
-            200,
-            data={"name": name, "color": "#3B82F6"}
-        )
-        if success:
-            print(f"Category created with ID: {response.get('category_id', 'Unknown')}")
-        return success
+    def create_test_wav_file(self, duration=5, filename=None, size_mb=None):
+        """Create a test WAV file with specified duration or size"""
+        if filename is None:
+            temp_file = tempfile.NamedTemporaryFile(suffix='.wav', delete=False)
+            filename = temp_file.name
+            temp_file.close()
+        
+        # Set parameters
+        sample_rate = 44100  # Hz
+        
+        if size_mb:
+            # Calculate duration based on desired size
+            # 44100 samples/sec * 2 bytes/sample * 2 channels
+            bytes_per_second = 44100 * 2 * 2
+            duration = (size_mb * 1024 * 1024) / bytes_per_second
+        
+        # Generate random audio data
+        num_samples = int(duration * sample_rate)
+        audio_data = np.random.uniform(-1, 1, num_samples).astype(np.float32)
+        
+        # Write to WAV file
+        with wave.open(filename, 'w') as wav_file:
+            wav_file.setnchannels(2)  # Stereo
+            wav_file.setsampwidth(2)  # 2 bytes per sample
+            wav_file.setframerate(sample_rate)
+            wav_file.writeframes((audio_data * 32767).astype(np.int16).tobytes())
+        
+        print(f"Created test WAV file: {filename}, Duration: {duration:.2f}s, Size: {os.path.getsize(filename) / (1024 * 1024):.2f} MB")
+        return filename
+
+    def test_upload_audio(self, file_path, title, category):
+        """Test uploading an audio file"""
+        file_size = os.path.getsize(file_path) / (1024 * 1024)  # Size in MB
+        print(f"Uploading file: {file_path}, Size: {file_size:.2f} MB")
+        
+        with open(file_path, 'rb') as file:
+            files = {'file': (os.path.basename(file_path), file, 'audio/wav')}
+            data = {'title': title, 'category': category}
+            
+            success, response = self.run_test(
+                f"Upload Audio ({file_size:.2f} MB)",
+                "POST",
+                "upload-audio",
+                200,
+                data=data,
+                files=files
+            )
+            
+            if success and 'file_id' in response:
+                self.uploaded_files.append(response['file_id'])
+                return response['file_id']
+            return None
 
     def test_get_audio_files(self, category=None):
-        """Test getting audio files, optionally filtered by category"""
-        endpoint = "api/audio-files"
+        """Get all audio files, optionally filtered by category"""
+        endpoint = "audio-files"
         if category:
             endpoint += f"?category={category}"
             
         success, response = self.run_test(
-            f"Get Audio Files{' for category: ' + category if category else ''}",
+            f"Get Audio Files{' (filtered by ' + category + ')' if category else ''}",
             "GET",
             endpoint,
             200
         )
-        if success:
-            audio_files = response.get('audio_files', [])
-            print(f"Found {len(audio_files)} audio files")
-            for audio in audio_files[:5]:  # Show first 5 only to avoid too much output
-                print(f"  - {audio.get('title', 'Unknown')} ({audio.get('category', 'No category')})")
-            if len(audio_files) > 5:
-                print(f"  ... and {len(audio_files) - 5} more")
-        return success, response.get('audio_files', [])
+        
+        if success and 'audio_files' in response:
+            return response['audio_files']
+        return []
 
-    def test_audio_file_endpoint(self, file_id):
-        """Test getting a specific audio file"""
+    def test_get_audio_file(self, file_id):
+        """Get a specific audio file by ID"""
         success, response = self.run_test(
-            f"Get Audio File {file_id}",
+            f"Get Audio File (ID: {file_id})",
             "GET",
-            f"api/audio-file/{file_id}",
+            f"audio-file/{file_id}",
             200
         )
-        if success:
-            print(f"Audio file details: {response.get('title', 'Unknown')}")
         return success
 
-    def test_audio_stream_endpoint(self, file_id):
-        """Test the audio streaming endpoint"""
+    def test_delete_audio_file(self, file_id):
+        """Delete an audio file"""
+        success, _ = self.run_test(
+            f"Delete Audio File (ID: {file_id})",
+            "DELETE",
+            f"audio-file/{file_id}",
+            200
+        )
+        if success and file_id in self.uploaded_files:
+            self.uploaded_files.remove(file_id)
+        return success
+
+    def test_stream_audio(self, file_id):
+        """Test streaming an audio file"""
         url = f"{self.base_url}/api/audio-stream/{file_id}"
-        print(f"\n🔍 Testing Audio Stream for file {file_id}...")
         
         self.tests_run += 1
+        print(f"\n🔍 Testing Audio Streaming (ID: {file_id})...")
+        
         try:
             response = requests.get(url, stream=True)
             if response.status_code == 200:
+                # Just check if we can get the first chunk of data
+                next(response.iter_content(chunk_size=1024), None)
                 self.tests_passed += 1
-                content_type = response.headers.get('Content-Type', '')
-                print(f"✅ Passed - Status: {response.status_code}, Content-Type: {content_type}")
-                # Just read a small part to verify stream works
-                chunk = next(response.iter_content(chunk_size=1024), None)
-                if chunk:
-                    print(f"Successfully read {len(chunk)} bytes from audio stream")
+                print(f"✅ Passed - Status: {response.status_code}, Content-Type: {response.headers.get('Content-Type')}")
                 return True
             else:
                 print(f"❌ Failed - Expected 200, got {response.status_code}")
-                print(f"Response: {response.text}")
                 return False
         except Exception as e:
             print(f"❌ Failed - Error: {str(e)}")
             return False
-            
-    def test_upload_audio_file(self, file_size_mb, category_name, expected_status=200):
-        """Test uploading an audio file with specified size"""
-        # Generate a random WAV file of specified size
-        file_content = self._generate_test_wav_file(file_size_mb)
-        
-        # Prepare the file for upload
-        files = {
-            'file': ('test_audio.wav', file_content, 'audio/wav')
-        }
-        
-        # Prepare form data
-        data = {
-            'title': f'Test Audio {file_size_mb}MB',
-            'category': category_name
-        }
-        
-        # Run the test
-        test_name = f"Upload {file_size_mb}MB Audio File"
-        success, response = self.run_test(
-            test_name,
-            "POST",
-            "api/upload-audio",
-            expected_status,
-            data=data,
-            files=files
-        )
-        
-        if success:
-            print(f"Successfully uploaded {file_size_mb}MB audio file")
-            return True, response.get('file_id', None)
-        else:
-            error_detail = response.get('detail', 'Unknown error')
-            print(f"Failed to upload {file_size_mb}MB audio file: {error_detail}")
-            return False, None
-    
-    def _generate_test_wav_file(self, size_mb):
-        """Generate a test WAV file of specified size in MB"""
-        # Simple WAV header (44 bytes)
-        wav_header = bytes([
-            # RIFF header
-            0x52, 0x49, 0x46, 0x46,  # "RIFF"
-            0x24, 0x00, 0x00, 0x00,  # Chunk size (placeholder)
-            0x57, 0x41, 0x56, 0x45,  # "WAVE"
-            
-            # Format subchunk
-            0x66, 0x6d, 0x74, 0x20,  # "fmt "
-            0x10, 0x00, 0x00, 0x00,  # Subchunk1 size (16 bytes)
-            0x01, 0x00,              # Audio format (1 = PCM)
-            0x01, 0x00,              # Num channels (1)
-            0x44, 0xac, 0x00, 0x00,  # Sample rate (44100)
-            0x88, 0x58, 0x01, 0x00,  # Byte rate
-            0x02, 0x00,              # Block align
-            0x10, 0x00,              # Bits per sample (16)
-            
-            # Data subchunk
-            0x64, 0x61, 0x74, 0x61,  # "data"
-            0x00, 0x00, 0x00, 0x00   # Subchunk2 size (placeholder)
-        ])
-        
-        # Calculate data size (1MB = 1048576 bytes)
-        data_size = int(size_mb * 1024 * 1024) - len(wav_header)
-        
-        # Update chunk sizes in header
-        wav_header_list = bytearray(wav_header)
-        # RIFF chunk size = file size - 8
-        riff_chunk_size = data_size + 36  # 36 = size of header - 8
-        wav_header_list[4:8] = riff_chunk_size.to_bytes(4, byteorder='little')
-        # Data chunk size
-        wav_header_list[40:44] = data_size.to_bytes(4, byteorder='little')
-        
-        # Create file content with header and random data
-        file_content = io.BytesIO()
-        file_content.write(bytes(wav_header_list))
-        
-        # Generate random audio data in chunks to avoid memory issues
-        chunk_size = min(1024 * 1024, data_size)  # 1MB chunks or smaller
-        remaining = data_size
-        
-        while remaining > 0:
-            current_chunk = min(chunk_size, remaining)
-            random_data = bytes([random.randint(0, 255) for _ in range(current_chunk)])
-            file_content.write(random_data)
-            remaining -= current_chunk
-        
-        file_content.seek(0)
-        return file_content
 
-    def print_summary(self):
-        """Print test results summary"""
-        print("\n" + "="*50)
-        print(f"📊 API TEST SUMMARY: {self.tests_passed}/{self.tests_run} tests passed")
-        print("="*50)
-        if self.tests_passed == self.tests_run:
-            print("✅ All tests passed!")
-        else:
-            print(f"❌ {self.tests_run - self.tests_passed} tests failed")
-        print("="*50)
+    def cleanup(self):
+        """Clean up any created resources"""
+        print("\n🧹 Cleaning up resources...")
+        
+        # Delete uploaded files
+        for file_id in self.uploaded_files[:]:
+            self.test_delete_audio_file(file_id)
 
 def main():
-    # Setup
-    tester = PodcastHubAPITester()
+    # Get backend URL from environment or use the one from frontend/.env
+    backend_url = "https://9fe0c2b0-7831-40b8-a607-5c9b24890339.preview.emergentagent.com"
     
-    # Run tests
-    print("\n🚀 Starting PodcastHub API Tests...")
+    print(f"🚀 Starting Podcast API Tests against {backend_url}")
+    tester = PodcastAPITester(backend_url)
     
-    # Test health endpoint
-    health_ok = tester.test_health_endpoint()
-    if not health_ok:
+    # Basic health check
+    if not tester.test_health_check():
         print("❌ Health check failed, stopping tests")
-        tester.print_summary()
         return 1
     
-    # Test categories
-    categories_ok, existing_categories = tester.test_get_categories()
+    # Test category functionality
+    test_category = f"Test Category {datetime.now().strftime('%H%M%S')}"
+    category_id = tester.test_create_category(test_category)
+    if not category_id:
+        print("❌ Category creation failed")
     
-    # Create a test category if none exist
-    if categories_ok and len(existing_categories) == 0:
-        test_category_name = f"Test Category {datetime.now().strftime('%H%M%S')}"
-        tester.test_create_category(test_category_name)
-        # Refresh categories
-        categories_ok, existing_categories = tester.test_get_categories()
+    categories = tester.test_get_categories()
+    print(f"Found {len(categories)} categories")
     
-    # Get a category for testing uploads
-    test_category = None
-    if categories_ok and len(existing_categories) > 0:
-        test_category = existing_categories[0].get('name')
-    else:
-        print("❌ No categories available for testing uploads")
-        tester.print_summary()
-        return 1
+    # Test file upload with different sizes
+    test_files = []
     
-    # Test file size limit functionality
-    print("\n🔍 Testing file size limit functionality...")
+    # Small file (1-5MB)
+    small_file = tester.create_test_wav_file(size_mb=2)
+    test_files.append(small_file)
     
-    # Test small file upload (1MB)
-    small_file_ok, small_file_id = tester.test_upload_audio_file(1, test_category)
+    # Medium file (10-50MB)
+    medium_file = tester.create_test_wav_file(size_mb=15)
+    test_files.append(medium_file)
     
-    # Test medium file upload (50MB) - should succeed with new 100MB limit
-    # Note: Reduced to 5MB for testing efficiency
-    medium_file_ok, medium_file_id = tester.test_upload_audio_file(5, test_category)
+    # Large file (just under 100MB)
+    large_file = tester.create_test_wav_file(size_mb=95)
+    test_files.append(large_file)
     
-    # Test file just under the limit (99MB) - should succeed
-    # Note: Using a smaller size for testing efficiency
-    under_limit_ok, under_limit_id = tester.test_upload_audio_file(99, test_category)
+    # Very large file (over 100MB) - should fail
+    very_large_file = tester.create_test_wav_file(size_mb=105)
+    test_files.append(very_large_file)
     
-    # Test file at the limit (100MB) - should succeed
-    at_limit_ok, at_limit_id = tester.test_upload_audio_file(100, test_category)
-    
-    # Test large file upload (101MB) - should fail with 400 error
-    large_file_ok, _ = tester.test_upload_audio_file(101, test_category, expected_status=400)
-    
-    # Test audio files
-    audio_ok, audio_files = tester.test_get_audio_files()
-    
-    # Test category filtering if we have categories and audio files
-    if categories_ok and audio_ok and len(existing_categories) > 0 and len(audio_files) > 0:
-        # Get the first category name
-        first_category = existing_categories[0].get('name')
-        if first_category:
-            tester.test_get_audio_files(first_category)
-    
-    # Test specific audio file if we have any
-    if audio_ok and len(audio_files) > 0:
-        first_audio = audio_files[0]
-        file_id = first_audio.get('id')
+    # Upload files and test functionality
+    for i, file_path in enumerate(test_files):
+        file_size = os.path.getsize(file_path) / (1024 * 1024)
+        title = f"Test Audio {i+1} ({file_size:.1f} MB)"
+        
+        # Skip very large file test if we're not testing error cases
+        if file_size > 100:
+            print(f"\n🔍 Testing Upload of file larger than 100MB (expecting failure)...")
+            with open(file_path, 'rb') as file:
+                files = {'file': (os.path.basename(file_path), file, 'audio/wav')}
+                data = {'title': title, 'category': test_category}
+                
+                # This should fail with 413 status code
+                success, response = tester.run_test(
+                    f"Upload Audio (Over Size Limit: {file_size:.2f} MB)",
+                    "POST",
+                    "upload-audio",
+                    413,  # Expecting 413 Payload Too Large
+                    data=data,
+                    files=files
+                )
+                if success:
+                    print("✅ Size limit check working correctly")
+                else:
+                    print("❌ Size limit check failed")
+            continue
+        
+        file_id = tester.test_upload_audio(file_path, title, test_category)
         if file_id:
-            tester.test_audio_file_endpoint(file_id)
-            tester.test_audio_stream_endpoint(file_id)
+            print(f"Successfully uploaded file with ID: {file_id}")
+            
+            # Test getting the file details
+            tester.test_get_audio_file(file_id)
+            
+            # Test streaming the file
+            tester.test_stream_audio(file_id)
+        else:
+            print(f"❌ Failed to upload file: {file_path}")
     
-    # Print summary
-    tester.print_summary()
+    # Test getting all files
+    all_files = tester.test_get_audio_files()
+    print(f"Found {len(all_files)} audio files in total")
+    
+    # Test category filtering
+    category_files = tester.test_get_audio_files(test_category)
+    print(f"Found {len(category_files)} audio files in category '{test_category}'")
+    
+    # Clean up
+    tester.cleanup()
+    
+    # Clean up test files
+    for file_path in test_files:
+        try:
+            os.unlink(file_path)
+            print(f"Deleted test file: {file_path}")
+        except Exception as e:
+            print(f"Failed to delete test file {file_path}: {str(e)}")
+    
+    # Print results
+    print(f"\n📊 Tests passed: {tester.tests_passed}/{tester.tests_run}")
     return 0 if tester.tests_passed == tester.tests_run else 1
 
 if __name__ == "__main__":
