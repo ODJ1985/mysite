@@ -5,6 +5,7 @@ import json
 import uuid
 import time
 from pathlib import Path
+import tempfile
 
 # Get the backend URL from the frontend .env file
 def get_backend_url():
@@ -112,11 +113,11 @@ def test_chunked_upload(base_url, file_path, chunk_size=1024*1024):
         print(f"Chunk size: {chunk_size} bytes")
         print(f"Total chunks: {total_chunks}")
         
-        # Generate a unique upload ID
-        upload_id = str(uuid.uuid4())
+        # Generate a unique file ID
+        file_id = str(uuid.uuid4())
         filename = f"test_chunked_{uuid.uuid4().hex[:6]}.wav"
         
-        print(f"Upload ID: {upload_id}")
+        print(f"File ID: {file_id}")
         print(f"Filename: {filename}")
         
         # Upload each chunk
@@ -125,28 +126,36 @@ def test_chunked_upload(base_url, file_path, chunk_size=1024*1024):
             end_byte = min(file_size, start_byte + chunk_size)
             chunk_data = file_content[start_byte:end_byte]
             
-            is_last_chunk = (i == total_chunks - 1)
-            
             print(f"\nUploading chunk {i+1}/{total_chunks} (bytes {start_byte}-{end_byte})")
             
             # Prepare the request
             url = f"{base_url}/api/upload-audio-chunk"
             
-            files = {
-                "file": (filename, chunk_data, "audio/wav")
-            }
+            # Create a temporary file for the chunk
+            with tempfile.NamedTemporaryFile(delete=False, suffix='.wav') as temp_file:
+                temp_file.write(chunk_data)
+                temp_file_path = temp_file.name
             
-            data = {
-                "upload_id": upload_id,
-                "chunk_index": i,
-                "total_chunks": total_chunks,
-                "is_last_chunk": "true" if is_last_chunk else "false",
-                "title": f"Chunked Test Audio {uuid.uuid4().hex[:6]}",
-                "category": "Test Category"
-            }
+            # Open the temporary file for the request
+            with open(temp_file_path, "rb") as f:
+                files = {
+                    "chunk": (filename, f, "audio/wav")
+                }
+                
+                data = {
+                    "chunk_number": i,
+                    "total_chunks": total_chunks,
+                    "file_id": file_id,
+                    "title": f"Chunked Test Audio {uuid.uuid4().hex[:6]}",
+                    "category": "Test Category",
+                    "original_filename": filename
+                }
+                
+                # Send the request
+                response = requests.post(url, data=data, files=files)
             
-            # Send the request
-            response = requests.post(url, data=data, files=files)
+            # Clean up the temporary file
+            os.unlink(temp_file_path)
             
             print(f"Status code: {response.status_code}")
             print(f"Response: {response.text[:200]}")
