@@ -136,6 +136,30 @@ frontend:
           agent: "main"
           comment: "iPhoneホーム画面アイコン表示機能を実装完了。ユーザー提供のオリジナルWYEBIYAロゴを最適化（1024x1024 2.1MB → 180x180 40KB）。Apple Touch Icon複数サイズ対応（180x180, 152x152, 120x120）。precomposed属性追加でiOS互換性向上。キャッシュバスティングv7適用。"
 
+  - task: "Audio Upload Function Verification"
+    implemented: true
+    working: true
+    file: "App.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "main"
+          comment: "音声アップロード機能の動作確認。バックエンドテストでは正常動作確認済み（通常アップロード・分割アップロード両方対応）。プレビューボタンを削除済み。フロントエンドコードも正常。ユーザー報告の問題要調査。"
+
+  - task: "Remove Preview Function"
+    implemented: true
+    working: true
+    file: "App.js, preview.html"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "main"
+          comment: "不要なプレビュー機能を削除完了。プレビューボタンをヘッダーから削除、preview.htmlファイルも削除。UIがよりシンプルになりました。"
+
 metadata:
   created_by: "main_agent"
   version: "1.0"
