@@ -290,17 +290,27 @@ function App() {
               全て
             </button>
             {categories.map((category) => (
-              <button
-                key={category.id}
-                onClick={() => setSelectedCategory(category.name)}
-                className={`px-3 py-2 sm:px-6 sm:py-3 text-sm sm:text-base font-medium transition-all duration-300 ${
-                  selectedCategory === category.name
-                    ? 'neumorphic-inset text-blue-600'
-                    : 'neumorphic-button text-gray-700'
-                }`}
-              >
-                {category.name.length > 10 ? category.name.substring(0, 10) + '...' : category.name}
-              </button>
+              <div key={category.id} className="flex items-center group">
+                <button
+                  onClick={() => setSelectedCategory(category.name)}
+                  className={`px-3 py-2 sm:px-6 sm:py-3 text-sm sm:text-base font-medium transition-all duration-300 ${
+                    selectedCategory === category.name
+                      ? 'neumorphic-inset text-blue-600'
+                      : 'neumorphic-button text-gray-700'
+                  }`}
+                  style={{borderRadius: '12px 0 0 12px'}}
+                >
+                  {category.name.length > 10 ? category.name.substring(0, 10) + '...' : category.name}
+                </button>
+                <button
+                  onClick={() => deleteCategory(category.name)}
+                  className="px-2 py-2 sm:px-3 sm:py-3 text-sm sm:text-base neumorphic-button text-red-500 hover:text-red-600 transition-all duration-300 opacity-0 group-hover:opacity-100"
+                  style={{borderRadius: '0 12px 12px 0', marginLeft: '1px'}}
+                  title={`カテゴリ「${category.name}」を削除`}
+                >
+                  🗑️
+                </button>
+              </div>
             ))}
           </div>
         </div>
