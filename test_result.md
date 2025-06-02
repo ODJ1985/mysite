@@ -195,7 +195,7 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Rating and Comment UI"
+    - "Audio Upload Function Verification"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
