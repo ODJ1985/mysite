@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 import requests
 import sys
@@ -17,6 +16,9 @@ class WyEBIYAPodcastTester:
         self.test_category = f"Test Category {uuid.uuid4().hex[:6]}"
         self.test_audio_id = None
         self.test_file_path = "/app/backend_test_audio.wav"
+        self.test_rating_id = None
+        self.test_comment_id = None
+        self.test_user_name = f"TestUser_{uuid.uuid4().hex[:6]}"
         
         # Create a test audio file if it doesn't exist
         self.create_test_audio_file()
@@ -47,7 +49,7 @@ class WyEBIYAPodcastTester:
                 print(f"Error creating test audio file: {e}")
                 # Create an empty file as fallback
                 with open(self.test_file_path, "wb") as f:
-                    f.write(b"\x52\x49\x46\x46\x24\x00\x00\x00\x57\x41\x56\x45\x66\x6d\x74\x20\x10\x00\x00\x00\x01\x00\x01\x00\x44\xac\x00\x00\x88\x58\x01\x00\x02\x00\x10\x00\x64\x61\x74\x61\x00\x00\x00\x00")
+                    f.write(b"\x52\x49\x46\x46\x24\x57\x41\x56\x45\x66\x6d\x74\x20\x10\x01\x01\x44\xac\x88\x58\x01\x02\x10\x64\x61\x74\x61")
                 print(f"Created minimal test audio file: {self.test_file_path}")
         
     def run_test(self, name, method, endpoint, expected_status, data=None, files=None, headers=None, params=None):
@@ -164,6 +166,11 @@ class WyEBIYAPodcastTester:
                 audio_files = data["audio_files"]
                 print(f"✅ Retrieved {len(audio_files)} audio files")
                 
+                # If we don't have a test audio ID yet, use the first one from the list
+                if not self.test_audio_id and audio_files:
+                    self.test_audio_id = audio_files[0]["id"]
+                    print(f"✅ Using existing audio file for testing. ID: {self.test_audio_id}")
+                
                 # Test with category filter if we have a test category
                 if self.test_category:
                     success2, data2 = self.run_test(
@@ -222,6 +229,240 @@ class WyEBIYAPodcastTester:
                 print("✅ Audio streaming successful")
             else:
                 print("✅ Audio streaming response received (not checking content)")
+        return success, data
+    
+    # New test methods for rating and comment functionality
+    
+    def test_add_rating(self):
+        """Test adding a rating to an audio file"""
+        if not self.test_audio_id:
+            print("⚠️ Cannot test add rating API: No test audio ID available")
+            return False, {}
+        
+        rating_value = 4  # Rating between 1-5
+        
+        success, data = self.run_test(
+            f"Add Rating (ID: {self.test_audio_id}, User: {self.test_user_name})", 
+            "POST", 
+            f"api/audio-file/{self.test_audio_id}/rating", 
+            200,
+            data={
+                "user_name": self.test_user_name,
+                "rating": rating_value
+            }
+        )
+        
+        if success:
+            if "rating_id" in data and data.get("message") == "Rating added successfully":
+                self.test_rating_id = data["rating_id"]
+                print(f"✅ Rating added successfully. ID: {self.test_rating_id}")
+            elif data.get("message") == "Rating updated successfully":
+                print(f"✅ Rating updated successfully")
+                # We need to get the rating ID from the feedback endpoint
+                self.test_get_audio_feedback()
+            else:
+                print(f"⚠️ Add rating response has unexpected format: {data}")
+        return success, data
+    
+    def test_update_rating(self):
+        """Test updating a rating by the same user"""
+        if not self.test_audio_id:
+            print("⚠️ Cannot test update rating API: No test audio ID available")
+            return False, {}
+        
+        new_rating_value = 5  # Updated rating
+        
+        success, data = self.run_test(
+            f"Update Rating (ID: {self.test_audio_id}, User: {self.test_user_name})", 
+            "POST", 
+            f"api/audio-file/{self.test_audio_id}/rating", 
+            200,
+            data={
+                "user_name": self.test_user_name,
+                "rating": new_rating_value
+            }
+        )
+        
+        if success:
+            if data.get("message") == "Rating updated successfully":
+                print(f"✅ Rating updated successfully")
+            else:
+                print(f"⚠️ Update rating response has unexpected format: {data}")
+        return success, data
+    
+    def test_add_comment(self):
+        """Test adding a comment to an audio file"""
+        if not self.test_audio_id:
+            print("⚠️ Cannot test add comment API: No test audio ID available")
+            return False, {}
+        
+        comment_text = f"This is a test comment from {self.test_user_name} at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+        
+        success, data = self.run_test(
+            f"Add Comment (ID: {self.test_audio_id}, User: {self.test_user_name})", 
+            "POST", 
+            f"api/audio-file/{self.test_audio_id}/comment", 
+            200,
+            data={
+                "user_name": self.test_user_name,
+                "comment_text": comment_text
+            }
+        )
+        
+        if success:
+            if "comment_id" in data and data.get("message") == "Comment added successfully":
+                self.test_comment_id = data["comment_id"]
+                print(f"✅ Comment added successfully. ID: {self.test_comment_id}")
+            else:
+                print(f"⚠️ Add comment response has unexpected format: {data}")
+        return success, data
+    
+    def test_get_audio_feedback(self):
+        """Test getting feedback (ratings and comments) for an audio file"""
+        if not self.test_audio_id:
+            print("⚠️ Cannot test get feedback API: No test audio ID available")
+            return False, {}
+        
+        success, data = self.run_test(
+            f"Get Audio Feedback (ID: {self.test_audio_id})", 
+            "GET", 
+            f"api/audio-file/{self.test_audio_id}/feedback", 
+            200
+        )
+        
+        if success:
+            if "average_rating" in data and "total_ratings" in data and "comments" in data and "ratings" in data:
+                print(f"✅ Retrieved feedback for audio file ID: {self.test_audio_id}")
+                print(f"   Average Rating: {data['average_rating']}")
+                print(f"   Total Ratings: {data['total_ratings']}")
+                print(f"   Comments: {len(data['comments'])}")
+                print(f"   Ratings: {len(data['ratings'])}")
+                
+                # If we don't have a rating ID yet, try to find it
+                if not self.test_rating_id and data['ratings']:
+                    for rating in data['ratings']:
+                        if rating['user_name'] == self.test_user_name:
+                            self.test_rating_id = rating['id']
+                            print(f"✅ Found rating ID: {self.test_rating_id}")
+                            break
+                
+                # If we don't have a comment ID yet, try to find it
+                if not self.test_comment_id and data['comments']:
+                    for comment in data['comments']:
+                        if comment['user_name'] == self.test_user_name:
+                            self.test_comment_id = comment['id']
+                            print(f"✅ Found comment ID: {self.test_comment_id}")
+                            break
+            else:
+                print(f"⚠️ Get feedback response has unexpected format: {data}")
+        return success, data
+    
+    def test_invalid_file_id(self):
+        """Test error handling with invalid file ID"""
+        invalid_id = str(uuid.uuid4())  # Generate a random UUID that doesn't exist
+        
+        # Test rating with invalid ID
+        success1, data1 = self.run_test(
+            f"Add Rating to Invalid File ID", 
+            "POST", 
+            f"api/audio-file/{invalid_id}/rating", 
+            404,
+            data={
+                "user_name": self.test_user_name,
+                "rating": 5
+            }
+        )
+        
+        # Test comment with invalid ID
+        success2, data2 = self.run_test(
+            f"Add Comment to Invalid File ID", 
+            "POST", 
+            f"api/audio-file/{invalid_id}/comment", 
+            404,
+            data={
+                "user_name": self.test_user_name,
+                "comment_text": "This should fail"
+            }
+        )
+        
+        # Test get feedback with invalid ID
+        success3, data3 = self.run_test(
+            f"Get Feedback for Invalid File ID", 
+            "GET", 
+            f"api/audio-file/{invalid_id}/feedback", 
+            404
+        )
+        
+        return success1 and success2 and success3, {}
+    
+    def test_delete_comment(self):
+        """Test deleting a comment"""
+        if not self.test_comment_id:
+            print("⚠️ Cannot test delete comment API: No test comment ID available")
+            return False, {}
+        
+        success, data = self.run_test(
+            f"Delete Comment (ID: {self.test_comment_id})", 
+            "DELETE", 
+            f"api/comments/{self.test_comment_id}", 
+            200
+        )
+        
+        if success:
+            if data.get("message") == "Comment deleted successfully":
+                print(f"✅ Comment deleted successfully")
+                
+                # Verify deletion by checking feedback
+                success2, data2 = self.run_test(
+                    f"Verify Comment Deletion", 
+                    "GET", 
+                    f"api/audio-file/{self.test_audio_id}/feedback", 
+                    200
+                )
+                
+                if success2:
+                    comments = data2.get("comments", [])
+                    if not any(comment["id"] == self.test_comment_id for comment in comments):
+                        print("✅ Verified comment was deleted (not in comments list)")
+                    else:
+                        print("⚠️ Comment still in list after deletion")
+            else:
+                print(f"⚠️ Delete comment response has unexpected format: {data}")
+        return success, data
+    
+    def test_delete_rating(self):
+        """Test deleting a rating"""
+        if not self.test_rating_id:
+            print("⚠️ Cannot test delete rating API: No test rating ID available")
+            return False, {}
+        
+        success, data = self.run_test(
+            f"Delete Rating (ID: {self.test_rating_id})", 
+            "DELETE", 
+            f"api/ratings/{self.test_rating_id}", 
+            200
+        )
+        
+        if success:
+            if data.get("message") == "Rating deleted successfully":
+                print(f"✅ Rating deleted successfully")
+                
+                # Verify deletion by checking feedback
+                success2, data2 = self.run_test(
+                    f"Verify Rating Deletion", 
+                    "GET", 
+                    f"api/audio-file/{self.test_audio_id}/feedback", 
+                    200
+                )
+                
+                if success2:
+                    ratings = data2.get("ratings", [])
+                    if not any(rating["id"] == self.test_rating_id for rating in ratings):
+                        print("✅ Verified rating was deleted (not in ratings list)")
+                    else:
+                        print("⚠️ Rating still in list after deletion")
+            else:
+                print(f"⚠️ Delete rating response has unexpected format: {data}")
         return success, data
     
     def test_delete_audio(self):
@@ -295,6 +536,34 @@ class WyEBIYAPodcastTester:
             else:
                 print(f"⚠️ Delete category response has unexpected format: {data}")
         return success, data
+    
+    def run_feedback_tests(self):
+        """Run tests for the new rating and comment APIs"""
+        print("\n=== Starting Rating and Comment API Tests ===\n")
+        
+        # Make sure we have an audio file to test with
+        if not self.test_audio_id:
+            # Try to get existing audio files
+            success, data = self.test_get_audio_files()
+            if not success or not self.test_audio_id:
+                # If no audio files exist, create a category and upload a test file
+                self.test_create_category()
+                self.test_upload_audio()
+        
+        # Test rating and comment APIs
+        self.test_add_rating()
+        self.test_add_comment()
+        self.test_get_audio_feedback()
+        self.test_update_rating()
+        self.test_get_audio_feedback()  # Check if rating was updated
+        self.test_invalid_file_id()
+        self.test_delete_comment()
+        self.test_delete_rating()
+        
+        # Print summary
+        self.print_summary()
+        
+        return self.tests_passed == self.tests_run
         
     def run_all_tests(self):
         """Run all API tests in sequence"""
@@ -312,9 +581,19 @@ class WyEBIYAPodcastTester:
         self.test_get_audio_files()
         self.test_get_audio_file()
         self.test_stream_audio()
-        self.test_delete_audio()
         
-        # Clean up - delete test category
+        # Test rating and comment APIs
+        self.test_add_rating()
+        self.test_add_comment()
+        self.test_get_audio_feedback()
+        self.test_update_rating()
+        self.test_get_audio_feedback()  # Check if rating was updated
+        self.test_invalid_file_id()
+        self.test_delete_comment()
+        self.test_delete_rating()
+        
+        # Clean up - delete test audio and category
+        self.test_delete_audio()
         self.test_delete_category()
         
         # Print summary
@@ -343,8 +622,8 @@ def get_backend_url():
     except Exception as e:
         print(f"Error reading frontend/.env file: {e}")
     
-    # Fallback to hardcoded URL from the original script
-    return "https://1e3d862d-5dd1-4551-a519-06c14af7772e.preview.emergentagent.com"
+    # Fallback to hardcoded URL
+    return "http://localhost:8001"
         
 def main():
     # Get the backend URL from environment
@@ -355,8 +634,12 @@ def main():
     # Initialize tester
     tester = WyEBIYAPodcastTester(backend_url)
     
-    # Run all tests
-    success = tester.run_all_tests()
+    # Run feedback tests only (for focused testing of new APIs)
+    if len(sys.argv) > 1 and sys.argv[1] == "--feedback-only":
+        success = tester.run_feedback_tests()
+    else:
+        # Run all tests
+        success = tester.run_all_tests()
     
     return 0 if success else 1
     
