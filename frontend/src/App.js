@@ -14,6 +14,14 @@ function App() {
   const [volume, setVolume] = useState(1);
   const [playbackRate, setPlaybackRate] = useState(1);
   
+  // Rating and Comment state
+  const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
+  const [selectedAudioId, setSelectedAudioId] = useState(null);
+  const [audioFeedback, setAudioFeedback] = useState({});
+  const [userRating, setUserRating] = useState(0);
+  const [userComment, setUserComment] = useState('');
+  const [userName, setUserName] = useState('');
+  
   const audioRef = useRef(null);
   const fileInputRef = useRef(null);
   
