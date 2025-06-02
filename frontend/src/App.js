@@ -516,7 +516,7 @@ function App() {
                 </button>
               </div>
               
-              <div className="flex items-center space-x-3 sm:space-x-4">
+              <div className="flex items-center space-x-3 sm:space-x-4 mb-3">
                 <button
                   onClick={() => playAudio(audio)}
                   className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 neumorphic-button flex items-center justify-center"
@@ -539,6 +539,32 @@ function App() {
                     {(audio.file_size / (1024 * 1024)).toFixed(2)} MB
                   </div>
                 </div>
+              </div>
+
+              {/* Rating and Comment Section */}
+              <div className="border-t border-gray-300 pt-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <div className="flex items-center">
+                      {renderStars(Math.round(audioFeedback[audio.id]?.average_rating || 0))}
+                    </div>
+                    <span className="text-sm text-gray-600">
+                      {audioFeedback[audio.id]?.average_rating?.toFixed(1) || '0.0'} 
+                      ({audioFeedback[audio.id]?.total_ratings || 0})
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => openFeedbackModal(audio.id)}
+                    className="neumorphic-button px-3 py-1 text-sm text-blue-600 hover:text-blue-700 transition-colors"
+                  >
+                    💬 評価・コメント
+                  </button>
+                </div>
+                {audioFeedback[audio.id]?.comments?.length > 0 && (
+                  <div className="mt-2 text-xs text-gray-500">
+                    💬 {audioFeedback[audio.id].comments.length} コメント
+                  </div>
+                )}
               </div>
             </div>
           ))}
