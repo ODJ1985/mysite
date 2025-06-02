@@ -30,6 +30,26 @@ class Category(BaseModel):
     color: str
     created_at: datetime
 
+class Rating(BaseModel):
+    id: str
+    audio_file_id: str
+    user_name: str
+    rating: int  # 1-5 stars
+    created_at: datetime
+
+class Comment(BaseModel):
+    id: str
+    audio_file_id: str
+    user_name: str
+    comment_text: str
+    created_at: datetime
+
+class AudioFeedback(BaseModel):
+    average_rating: float
+    total_ratings: int
+    comments: List[Comment]
+    ratings: List[Rating]
+
 app = FastAPI()
 
 # CORS middleware
