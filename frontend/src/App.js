@@ -974,6 +974,149 @@ function App() {
           </div>
         </div>
       )}
+
+      {/* Feedback Modal */}
+      {feedbackModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-gray-200 neumorphic p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-gray-700">評価・コメント</h2>
+              <button
+                onClick={closeFeedbackModal}
+                className="text-gray-500 hover:text-gray-700 text-3xl"
+              >
+                ×
+              </button>
+            </div>
+
+            {/* Current Ratings Summary */}
+            <div className="neumorphic-card p-4 mb-6">
+              <div className="flex items-center space-x-4">
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-gray-700">
+                    {audioFeedback.average_rating?.toFixed(1) || '0.0'}
+                  </div>
+                  <div className="flex justify-center">
+                    {renderStars(Math.round(audioFeedback.average_rating || 0))}
+                  </div>
+                  <div className="text-sm text-gray-600 mt-1">
+                    {audioFeedback.total_ratings || 0} 評価
+                  </div>
+                </div>
+                <div className="text-sm text-gray-600">
+                  {audioFeedback.comments?.length || 0} コメント
+                </div>
+              </div>
+            </div>
+
+            {/* Add Rating Form */}
+            <div className="neumorphic-card p-4 mb-6">
+              <h3 className="text-lg font-semibold text-gray-700 mb-4">評価を追加</h3>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">名前</label>
+                  <input
+                    type="text"
+                    value={userName}
+                    onChange={(e) => setUserName(e.target.value)}
+                    className="w-full px-4 py-3 neumorphic-inset focus:outline-none"
+                    placeholder="お名前を入力"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">評価</label>
+                  <div className="flex items-center space-x-2">
+                    {renderStars(userRating, true, setUserRating)}
+                    <span className="text-sm text-gray-600 ml-2">
+                      {userRating > 0 ? `${userRating}星` : '評価を選択'}
+                    </span>
+                  </div>
+                </div>
+                
+                <button
+                  onClick={submitRating}
+                  className="w-full px-6 py-3 neumorphic-button font-medium text-blue-600 hover:text-blue-700"
+                >
+                  評価を送信
+                </button>
+              </div>
+            </div>
+
+            {/* Add Comment Form */}
+            <div className="neumorphic-card p-4 mb-6">
+              <h3 className="text-lg font-semibold text-gray-700 mb-4">コメントを追加</h3>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">コメント</label>
+                  <textarea
+                    value={userComment}
+                    onChange={(e) => setUserComment(e.target.value)}
+                    className="w-full px-4 py-3 neumorphic-inset focus:outline-none resize-none"
+                    rows="3"
+                    placeholder="コメントを入力（最大500文字）"
+                    maxLength="500"
+                  />
+                  <div className="text-xs text-gray-500 mt-1">
+                    {userComment.length}/500 文字
+                  </div>
+                </div>
+                
+                <button
+                  onClick={submitComment}
+                  className="w-full px-6 py-3 neumorphic-button font-medium text-blue-600 hover:text-blue-700"
+                >
+                  コメントを送信
+                </button>
+              </div>
+            </div>
+
+            {/* Comments List */}
+            {audioFeedback.comments && audioFeedback.comments.length > 0 && (
+              <div className="neumorphic-card p-4">
+                <h3 className="text-lg font-semibold text-gray-700 mb-4">コメント一覧</h3>
+                <div className="space-y-4 max-h-60 overflow-y-auto">
+                  {audioFeedback.comments.map((comment) => (
+                    <div key={comment.id} className="border-b border-gray-300 pb-3 last:border-b-0">
+                      <div className="flex justify-between items-start mb-2">
+                        <span className="font-medium text-gray-700">{comment.user_name}</span>
+                        <span className="text-xs text-gray-500">
+                          {new Date(comment.created_at).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <p className="text-gray-600 text-sm">{comment.comment_text}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Ratings List */}
+            {audioFeedback.ratings && audioFeedback.ratings.length > 0 && (
+              <div className="neumorphic-card p-4 mt-6">
+                <h3 className="text-lg font-semibold text-gray-700 mb-4">評価一覧</h3>
+                <div className="space-y-3 max-h-40 overflow-y-auto">
+                  {audioFeedback.ratings.map((rating) => (
+                    <div key={rating.id} className="flex justify-between items-center">
+                      <div className="flex items-center space-x-3">
+                        <span className="font-medium text-gray-700">{rating.user_name}</span>
+                        <div className="flex items-center">
+                          {renderStars(rating.rating)}
+                        </div>
+                      </div>
+                      <span className="text-xs text-gray-500">
+                        {new Date(rating.created_at).toLocaleDateString()}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
