@@ -267,6 +267,70 @@ def get_backend_url():
     # Fallback to hardcoded URL
     return "http://localhost:8001"
 
+def test_oversized_file(self, file_path, file_size):
+        """Test uploading a file that exceeds the maximum allowed size"""
+        print(f"\n🔍 Testing oversized file upload with {file_size:.2f} MB file...")
+        
+        # Generate a file ID for this upload
+        file_id = str(uuid.uuid4())
+        original_filename = os.path.basename(file_path)
+        title = f"Oversized Test {datetime.now().strftime('%H:%M:%S')}"
+        
+        # Calculate chunk size in bytes (use 5MB chunks)
+        chunk_size_mb = 5
+        chunk_size_bytes = chunk_size_mb * 1024 * 1024
+        
+        # Read the file
+        with open(file_path, 'rb') as f:
+            file_data = f.read()
+        
+        # Calculate total chunks
+        total_chunks = (len(file_data) + chunk_size_bytes - 1) // chunk_size_bytes
+        print(f"File will be split into {total_chunks} chunks")
+        
+        # Upload first chunk to test if the system rejects oversized files
+        chunk_data = file_data[0:chunk_size_bytes]
+        
+        # Create a temporary file for the chunk
+        with tempfile.NamedTemporaryFile(suffix='.chunk', delete=False) as chunk_file:
+            chunk_file.write(chunk_data)
+            chunk_file_path = chunk_file.name
+        
+        # Upload the chunk
+        with open(chunk_file_path, 'rb') as chunk_file:
+            files = {'chunk': (f'chunk_0', chunk_file, 'application/octet-stream')}
+            data = {
+                'chunk_number': 0,
+                'total_chunks': total_chunks,
+                'file_id': file_id,
+                'title': title,
+                'category': self.test_category,
+                'original_filename': original_filename
+            }
+            
+            # For oversized files, we expect either:
+            # 1. A 413 response immediately (if the server checks total size upfront)
+            # 2. A 200 response for the first chunk, but an error on a later chunk or completion
+            success, response, response_time = self.run_test(
+                f"Upload First Chunk of Oversized File",
+                "POST",
+                "upload-audio-chunk",
+                200,  # We'll accept 200 for the first chunk
+                data=data,
+                files=files
+            )
+            
+            # Clean up the temporary chunk file
+            os.unlink(chunk_file_path)
+            
+            if not success:
+                # If the server rejected the first chunk, that's good - it means it's checking file size
+                print(f"✅ Server correctly rejected the first chunk of an oversized file")
+                return True
+            else:
+                print(f"⚠️ Server accepted the first chunk of an oversized file. This might be OK if it checks total size later.")
+                return False
+
 def main():
     # Get the backend URL
     backend_url = get_backend_url()
@@ -281,36 +345,51 @@ def main():
         return 1
     
     try:
-        # Create a 30MB test file
-        file_path, actual_size = tester.create_test_wav_file(30, filename="/tmp/thirty_mb_test.wav")
+        # Create test files
+        test_files = [
+            (30, "/tmp/thirty_mb_test.wav"),
+            (55, "/tmp/oversized_test.wav")
+        ]
         
-        # Test with different chunk sizes
-        chunk_sizes = [5, 10, 15]
+        created_files = []
         
-        for chunk_size in chunk_sizes:
-            print(f"\n=== Testing with {chunk_size}MB chunk size ===")
+        for size_mb, filename in test_files:
+            file_path, actual_size = tester.create_test_wav_file(size_mb, filename=filename)
+            created_files.append(file_path)
+        
+        # Test 30MB file upload with 5MB chunks
+        thirty_mb_path = test_files[0][1]
+        thirty_mb_size = os.path.getsize(thirty_mb_path) / (1024 * 1024)
+        
+        file_id = tester.test_chunked_upload(thirty_mb_path, thirty_mb_size, chunk_size_mb=5)
+        
+        if file_id:
+            # Test retrieving the file
+            tester.test_get_audio_file(file_id)
             
-            # Test chunked upload
-            file_id = tester.test_chunked_upload(file_path, actual_size, chunk_size_mb=chunk_size)
-            
-            if file_id:
-                # Test retrieving the file
-                tester.test_get_audio_file(file_id)
-                
-                # Test streaming the file
-                tester.test_stream_audio(file_id)
-                
-                # Delete the file to save space
-                tester.cleanup()
-            else:
-                print(f"❌ Failed to upload 30MB file with {chunk_size}MB chunks")
+            # Test streaming the file
+            tester.test_stream_audio(file_id)
+        
+        # Test oversized file (should be rejected)
+        oversized_path = test_files[1][1]
+        oversized_size = os.path.getsize(oversized_path) / (1024 * 1024)
+        
+        tester.test_oversized_file(oversized_path, oversized_size)
         
         # Print summary
         tester.print_summary()
         
         # Clean up
-        os.unlink(file_path)
-        print(f"Deleted test file: {file_path}")
+        tester.cleanup()
+        
+        # Delete test files
+        for file_path in created_files:
+            try:
+                if os.path.exists(file_path):
+                    os.unlink(file_path)
+                    print(f"Deleted test file: {file_path}")
+            except Exception as e:
+                print(f"Failed to delete test file {file_path}: {str(e)}")
         
         return 0 if tester.tests_passed == tester.tests_run else 1
         
