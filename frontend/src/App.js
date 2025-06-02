@@ -36,7 +36,22 @@ function App() {
       
       const response = await fetch(url);
       const data = await response.json();
-      setAudioFiles(data.audio_files || []);
+      const files = data.audio_files || [];
+      setAudioFiles(files);
+      
+      // Fetch feedback for each audio file
+      await Promise.all(files.map(async (audio) => {
+        try {
+          const feedbackResponse = await fetch(`${backendUrl}/api/audio-file/${audio.id}/feedback`);
+          const feedbackData = await feedbackResponse.json();
+          setAudioFeedback(prev => ({
+            ...prev,
+            [audio.id]: feedbackData
+          }));
+        } catch (error) {
+          console.error(`Error fetching feedback for ${audio.id}:`, error);
+        }
+      }));
     } catch (error) {
       console.error('Error fetching audio files:', error);
     }
