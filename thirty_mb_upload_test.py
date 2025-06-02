@@ -267,7 +267,7 @@ def get_backend_url():
     # Fallback to hardcoded URL
     return "http://localhost:8001"
 
-def test_oversized_file(self, file_path, file_size):
+    def test_oversized_file(self, file_path, file_size):
         """Test uploading a file that exceeds the maximum allowed size"""
         print(f"\n🔍 Testing oversized file upload with {file_size:.2f} MB file...")
         
