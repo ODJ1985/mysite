@@ -123,6 +123,18 @@ backend:
           agent: "testing"
           comment: "音声アップロード機能の詳細テストを実施。通常アップロード（/api/upload-audio）と分割アップロード（/api/upload-audio-chunk）の両方が正常に動作していることを確認。小さなファイル（0.17MB）、中サイズのファイル（5MB）、大きなファイル（5.6MB）でのテストを実施し、すべてのケースで正常にアップロード、保存、取得ができることを確認。分割アップロードでは複数チャンクの結合も正常に動作。アップロードされたファイルはデータベースに正しく保存され、ファイルURLを通じてアクセス可能。"
 
+  - task: "Rating and Comment API"
+    implemented: true
+    working: true
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "評価・コメント機能の新しいAPIエンドポイントをテスト。すべてのエンドポイント（評価追加、コメント追加、フィードバック取得、評価削除、コメント削除）が正常に動作していることを確認。テスト中に24/24のテストケースが成功し、エラーは検出されませんでした。特に、同一ユーザーによる評価の更新、平均評価の計算、無効なファイルIDに対するエラーハンドリングなどの機能が正しく実装されていることを確認しました。"
+
 frontend:
   - task: "PWA Icon Implementation for iPhone Home Screen"
     implemented: true
@@ -163,12 +175,12 @@ frontend:
 metadata:
   created_by: "main_agent"
   version: "1.0"
-  test_sequence: 1
+  test_sequence: 2
   run_ui: false
 
 test_plan:
   current_focus:
-    - "PWA Icon Implementation for iPhone Home Screen"
+    - "Rating and Comment API"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
@@ -180,3 +192,5 @@ agent_communication:
       message: "バックエンドAPIの包括的なテストを実施しました。ヘルスチェック、カテゴリ管理、音声ファイル管理の全機能が正常に動作しています。テスト中に12/12のテストケースが成功し、エラーは検出されませんでした。PWAアイコン実装後も既存の音声ファイル管理機能に影響はありません。フロントエンドのPWAアイコン実装のテストはユーザーの許可を得てから実施します。"
     - agent: "testing"
       message: "音声アップロード機能の詳細テストを実施しました。通常アップロード（/api/upload-audio）と分割アップロード（/api/upload-audio-chunk）の両方が正常に動作していることを確認しました。小さなファイル（0.17MB）、中サイズのファイル（5MB）、大きなファイル（5.6MB）でのテストを実施し、すべてのケースで正常にアップロード、保存、取得ができることを確認しました。分割アップロードでは複数チャンクの結合も正常に動作しています。アップロードされたファイルはデータベースに正しく保存され、ファイルURLを通じてアクセス可能です。音声アップロード機能に問題はありません。"
+    - agent: "testing"
+      message: "評価・コメント機能の新しいAPIエンドポイントをテストしました。すべてのエンドポイント（評価追加、コメント追加、フィードバック取得、評価削除、コメント削除）が正常に動作していることを確認しました。テスト中に24/24のテストケースが成功し、エラーは検出されませんでした。特に、同一ユーザーによる評価の更新、平均評価の計算、無効なファイルIDに対するエラーハンドリングなどの機能が正しく実装されていることを確認しました。バックエンドの評価・コメント機能は完全に動作しており、問題は見つかりませんでした。"
