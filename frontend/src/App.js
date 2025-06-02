@@ -328,6 +328,107 @@ function App() {
     }
   };
 
+  // Rating and Comment Functions
+  const fetchAudioFeedback = async (audioId) => {
+    try {
+      const response = await fetch(`${backendUrl}/api/audio-file/${audioId}/feedback`);
+      const data = await response.json();
+      setAudioFeedback(data);
+    } catch (error) {
+      console.error('Error fetching feedback:', error);
+    }
+  };
+
+  const submitRating = async () => {
+    if (!selectedAudioId || !userName.trim() || userRating === 0) {
+      alert('名前と評価を入力してください');
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('user_name', userName.trim());
+      formData.append('rating', userRating);
+
+      const response = await fetch(`${backendUrl}/api/audio-file/${selectedAudioId}/rating`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        alert('評価が送信されました！');
+        await fetchAudioFeedback(selectedAudioId);
+        setUserRating(0);
+      } else {
+        alert('評価の送信に失敗しました');
+      }
+    } catch (error) {
+      console.error('Rating error:', error);
+      alert('評価の送信に失敗しました');
+    }
+  };
+
+  const submitComment = async () => {
+    if (!selectedAudioId || !userName.trim() || !userComment.trim()) {
+      alert('名前とコメントを入力してください');
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('user_name', userName.trim());
+      formData.append('comment_text', userComment.trim());
+
+      const response = await fetch(`${backendUrl}/api/audio-file/${selectedAudioId}/comment`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        alert('コメントが送信されました！');
+        await fetchAudioFeedback(selectedAudioId);
+        setUserComment('');
+      } else {
+        alert('コメントの送信に失敗しました');
+      }
+    } catch (error) {
+      console.error('Comment error:', error);
+      alert('コメントの送信に失敗しました');
+    }
+  };
+
+  const openFeedbackModal = (audioId) => {
+    setSelectedAudioId(audioId);
+    setFeedbackModalOpen(true);
+    fetchAudioFeedback(audioId);
+  };
+
+  const closeFeedbackModal = () => {
+    setFeedbackModalOpen(false);
+    setSelectedAudioId(null);
+    setAudioFeedback({});
+    setUserRating(0);
+    setUserComment('');
+  };
+
+  const renderStars = (rating, interactive = false, onStarClick = null) => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      stars.push(
+        <span
+          key={i}
+          className={`text-2xl cursor-pointer ${
+            i <= rating ? 'text-yellow-400' : 'text-gray-300'
+          } ${interactive ? 'hover:text-yellow-300' : ''}`}
+          onClick={interactive ? () => onStarClick(i) : undefined}
+        >
+          ⭐
+        </span>
+      );
+    }
+    return stars;
+  };
+
   return (
     <div className="min-h-screen bg-gray-200 text-gray-700">
       {/* Header */}
