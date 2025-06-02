@@ -356,6 +356,141 @@ async def stream_audio(file_id: str):
         filename=audio_file["original_filename"]
     )
 
+# Rating and Comment APIs
+
+@app.post("/api/audio-file/{file_id}/rating")
+async def add_rating(
+    file_id: str, 
+    user_name: str = Form(...), 
+    rating: int = Form(..., ge=1, le=5)
+):
+    """Add a rating to an audio file"""
+    
+    # Check if audio file exists
+    audio_file = await db.audio_files.find_one({"id": file_id})
+    if not audio_file:
+        raise HTTPException(status_code=404, detail="Audio file not found")
+    
+    # Check if user already rated this file
+    existing_rating = await db.ratings.find_one({"audio_file_id": file_id, "user_name": user_name})
+    if existing_rating:
+        # Update existing rating
+        await db.ratings.update_one(
+            {"audio_file_id": file_id, "user_name": user_name},
+            {"$set": {"rating": rating, "created_at": datetime.utcnow()}}
+        )
+        return {"message": "Rating updated successfully"}
+    
+    # Create new rating
+    rating_id = str(uuid.uuid4())
+    rating_record = {
+        "id": rating_id,
+        "audio_file_id": file_id,
+        "user_name": user_name,
+        "rating": rating,
+        "created_at": datetime.utcnow()
+    }
+    
+    await db.ratings.insert_one(rating_record)
+    
+    return {"message": "Rating added successfully", "rating_id": rating_id}
+
+@app.post("/api/audio-file/{file_id}/comment")
+async def add_comment(
+    file_id: str, 
+    user_name: str = Form(...), 
+    comment_text: str = Form(...)
+):
+    """Add a comment to an audio file"""
+    
+    # Check if audio file exists
+    audio_file = await db.audio_files.find_one({"id": file_id})
+    if not audio_file:
+        raise HTTPException(status_code=404, detail="Audio file not found")
+    
+    # Validate comment length
+    if len(comment_text.strip()) < 1:
+        raise HTTPException(status_code=400, detail="Comment cannot be empty")
+    
+    if len(comment_text) > 500:
+        raise HTTPException(status_code=400, detail="Comment cannot exceed 500 characters")
+    
+    # Create new comment
+    comment_id = str(uuid.uuid4())
+    comment_record = {
+        "id": comment_id,
+        "audio_file_id": file_id,
+        "user_name": user_name,
+        "comment_text": comment_text.strip(),
+        "created_at": datetime.utcnow()
+    }
+    
+    await db.comments.insert_one(comment_record)
+    
+    return {"message": "Comment added successfully", "comment_id": comment_id}
+
+@app.get("/api/audio-file/{file_id}/feedback")
+async def get_audio_feedback(file_id: str):
+    """Get ratings and comments for an audio file"""
+    
+    # Check if audio file exists
+    audio_file = await db.audio_files.find_one({"id": file_id})
+    if not audio_file:
+        raise HTTPException(status_code=404, detail="Audio file not found")
+    
+    # Get ratings
+    ratings_cursor = db.ratings.find({"audio_file_id": file_id}).sort("created_at", -1)
+    ratings = await ratings_cursor.to_list(length=100)
+    
+    # Get comments
+    comments_cursor = db.comments.find({"audio_file_id": file_id}).sort("created_at", -1)
+    comments = await comments_cursor.to_list(length=100)
+    
+    # Calculate average rating
+    total_ratings = len(ratings)
+    average_rating = 0.0
+    if total_ratings > 0:
+        total_score = sum(rating["rating"] for rating in ratings)
+        average_rating = round(total_score / total_ratings, 1)
+    
+    # Convert ObjectId to string
+    for rating in ratings:
+        rating["_id"] = str(rating["_id"])
+    
+    for comment in comments:
+        comment["_id"] = str(comment["_id"])
+    
+    return {
+        "average_rating": average_rating,
+        "total_ratings": total_ratings,
+        "ratings": ratings,
+        "comments": comments
+    }
+
+@app.delete("/api/comments/{comment_id}")
+async def delete_comment(comment_id: str):
+    """Delete a comment"""
+    
+    comment = await db.comments.find_one({"id": comment_id})
+    if not comment:
+        raise HTTPException(status_code=404, detail="Comment not found")
+    
+    await db.comments.delete_one({"id": comment_id})
+    
+    return {"message": "Comment deleted successfully"}
+
+@app.delete("/api/ratings/{rating_id}")
+async def delete_rating(rating_id: str):
+    """Delete a rating"""
+    
+    rating = await db.ratings.find_one({"id": rating_id})
+    if not rating:
+        raise HTTPException(status_code=404, detail="Rating not found")
+    
+    await db.ratings.delete_one({"id": rating_id})
+    
+    return {"message": "Rating deleted successfully"}
+
 if __name__ == "__main__":
     import uvicorn
     # Configure uvicorn to handle larger file uploads
