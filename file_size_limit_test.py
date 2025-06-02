@@ -7,7 +7,7 @@ def test_file_size_limit():
     """Test the 100MB file size limit for audio uploads"""
     
     # Get the backend URL from environment or use the default
-    backend_url = "https://69b0f385-191d-4d9c-8f85-af6b574a2e14.preview.emergentagent.com"
+    backend_url = "https://1e3d862d-5dd1-4551-a519-06c14af7772e.preview.emergentagent.com"
     
     print("🔍 Testing file size limit functionality...")
     

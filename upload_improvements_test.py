@@ -8,7 +8,7 @@ import time
 from datetime import datetime
 
 class FileUploadImprovementsTester:
-    def __init__(self, base_url="https://69b0f385-191d-4d9c-8f85-af6b574a2e14.preview.emergentagent.com"):
+    def __init__(self, base_url="https://1e3d862d-5dd1-4551-a519-06c14af7772e.preview.emergentagent.com"):
         self.base_url = base_url
         self.tests_run = 0
         self.tests_passed = 0

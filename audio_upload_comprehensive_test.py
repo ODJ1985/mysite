@@ -20,7 +20,7 @@ def get_backend_url():
         print(f"Error reading frontend/.env file: {e}")
     
     # Fallback to hardcoded URL
-    return "https://69b0f385-191d-4d9c-8f85-af6b574a2e14.preview.emergentagent.com"
+    return "https://1e3d862d-5dd1-4551-a519-06c14af7772e.preview.emergentagent.com"
 
 # Create a test WAV file
 def create_test_wav_file(file_path, duration_seconds=1, size_mb=None):

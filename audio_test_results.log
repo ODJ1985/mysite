@@ -1,10 +1,10 @@
-Testing backend at: https://69b0f385-191d-4d9c-8f85-af6b574a2e14.preview.emergentagent.com
+Testing backend at: https://1e3d862d-5dd1-4551-a519-06c14af7772e.preview.emergentagent.com
 
 🔍 TEST 1: Small file regular upload
 
 === Testing Regular Audio Upload (/api/upload-audio) ===
 File size: 0.17 MB
-Sending request to: https://69b0f385-191d-4d9c-8f85-af6b574a2e14.preview.emergentagent.com/api/upload-audio
+Sending request to: https://1e3d862d-5dd1-4551-a519-06c14af7772e.preview.emergentagent.com/api/upload-audio
 Status code: 200
 Response: {"message":"File uploaded successfully","file_id":"043a73af-6416-488d-be9f-0b26ce7c907d","title":"Test Audio 2e9a13","file_size":176444}
 ✅ Regular upload test passed
@@ -14,7 +14,7 @@ Response: {"message":"File uploaded successfully","file_id":"043a73af-6416-488d-
 
 === Testing Regular Audio Upload (/api/upload-audio) ===
 File size: 5.00 MB
-Sending request to: https://69b0f385-191d-4d9c-8f85-af6b574a2e14.preview.emergentagent.com/api/upload-audio
+Sending request to: https://1e3d862d-5dd1-4551-a519-06c14af7772e.preview.emergentagent.com/api/upload-audio
 Status code: 200
 Response: {"message":"File uploaded successfully","file_id":"437f1398-f596-4673-8d6d-ffa22e18db2e","title":"Test Audio 7f1dcf","file_size":5242880}
 ✅ Regular upload test passed
@@ -24,7 +24,7 @@ Response: {"message":"File uploaded successfully","file_id":"437f1398-f596-4673-
 
 === Testing Regular Audio Upload (/api/upload-audio) ===
 File size: 5.60 MB
-Sending request to: https://69b0f385-191d-4d9c-8f85-af6b574a2e14.preview.emergentagent.com/api/upload-audio
+Sending request to: https://1e3d862d-5dd1-4551-a519-06c14af7772e.preview.emergentagent.com/api/upload-audio
 Status code: 200
 Response: {"message":"File uploaded successfully","file_id":"af266227-2a3b-4022-8a12-f21c59209d00","title":"Test Audio 84a853","file_size":5869086}
 ✅ Regular upload test passed
@@ -103,7 +103,7 @@ Response: {"message":"File uploaded successfully","file_id":"927db5b1-244f-49cf-
 🔍 Verifying small_regular upload
 
 === Verifying Uploaded File (ID: 043a73af-6416-488d-be9f-0b26ce7c907d) ===
-Sending request to: https://69b0f385-191d-4d9c-8f85-af6b574a2e14.preview.emergentagent.com/api/audio-file/043a73af-6416-488d-be9f-0b26ce7c907d
+Sending request to: https://1e3d862d-5dd1-4551-a519-06c14af7772e.preview.emergentagent.com/api/audio-file/043a73af-6416-488d-be9f-0b26ce7c907d
 Status code: 200
 Response: {"_id":"683c615afe1d93299b535b66","id":"043a73af-6416-488d-be9f-0b26ce7c907d","filename":"043a73af-6416-488d-be9f-0b26ce7c907d.wav","original_filename":"test_audio_de3958.wav","title":"Test Audio 2e9a13","category":"Test Category","file_size":176444,"uploaded_at":"2025-06-01T14:19:06.730000","file_path":"uploads/043a73af-6416-488d-be9f-0b26ce7c907d.wav","file_url":"/uploads/043a73af-6416-488d-be9f-0b26ce7c907d.wav"}
 ✅ File verification passed
@@ -111,13 +111,13 @@ Response: {"_id":"683c615afe1d93299b535b66","id":"043a73af-6416-488d-be9f-0b26ce
    Title: Test Audio 2e9a13
    Category: Test Category
    File URL: /uploads/043a73af-6416-488d-be9f-0b26ce7c907d.wav
-   Checking file download from: https://69b0f385-191d-4d9c-8f85-af6b574a2e14.preview.emergentagent.com/uploads/043a73af-6416-488d-be9f-0b26ce7c907d.wav
+   Checking file download from: https://1e3d862d-5dd1-4551-a519-06c14af7772e.preview.emergentagent.com/uploads/043a73af-6416-488d-be9f-0b26ce7c907d.wav
 ✅ File download successful (0.01 MB)
 
 🔍 Verifying medium_regular upload
 
 === Verifying Uploaded File (ID: 437f1398-f596-4673-8d6d-ffa22e18db2e) ===
-Sending request to: https://69b0f385-191d-4d9c-8f85-af6b574a2e14.preview.emergentagent.com/api/audio-file/437f1398-f596-4673-8d6d-ffa22e18db2e
+Sending request to: https://1e3d862d-5dd1-4551-a519-06c14af7772e.preview.emergentagent.com/api/audio-file/437f1398-f596-4673-8d6d-ffa22e18db2e
 Status code: 200
 Response: {"_id":"683c615bfe1d93299b535b67","id":"437f1398-f596-4673-8d6d-ffa22e18db2e","filename":"437f1398-f596-4673-8d6d-ffa22e18db2e.wav","original_filename":"test_audio_823f67.wav","title":"Test Audio 7f1dcf","category":"Test Category","file_size":5242880,"uploaded_at":"2025-06-01T14:19:07.131000","file_path":"uploads/437f1398-f596-4673-8d6d-ffa22e18db2e.wav","file_url":"/uploads/437f1398-f596-4673-8d6d-ffa22e18db2e.wav"}
 ✅ File verification passed
@@ -125,13 +125,13 @@ Response: {"_id":"683c615bfe1d93299b535b67","id":"437f1398-f596-4673-8d6d-ffa22e
    Title: Test Audio 7f1dcf
    Category: Test Category
    File URL: /uploads/437f1398-f596-4673-8d6d-ffa22e18db2e.wav
-   Checking file download from: https://69b0f385-191d-4d9c-8f85-af6b574a2e14.preview.emergentagent.com/uploads/437f1398-f596-4673-8d6d-ffa22e18db2e.wav
+   Checking file download from: https://1e3d862d-5dd1-4551-a519-06c14af7772e.preview.emergentagent.com/uploads/437f1398-f596-4673-8d6d-ffa22e18db2e.wav
 ✅ File download successful (0.01 MB)
 
 🔍 Verifying large_regular upload
 
 === Verifying Uploaded File (ID: af266227-2a3b-4022-8a12-f21c59209d00) ===
-Sending request to: https://69b0f385-191d-4d9c-8f85-af6b574a2e14.preview.emergentagent.com/api/audio-file/af266227-2a3b-4022-8a12-f21c59209d00
+Sending request to: https://1e3d862d-5dd1-4551-a519-06c14af7772e.preview.emergentagent.com/api/audio-file/af266227-2a3b-4022-8a12-f21c59209d00
 Status code: 200
 Response: {"_id":"683c615bfe1d93299b535b68","id":"af266227-2a3b-4022-8a12-f21c59209d00","filename":"af266227-2a3b-4022-8a12-f21c59209d00.wav","original_filename":"test_audio_92c1ab.wav","title":"Test Audio 84a853","category":"Test Category","file_size":5869086,"uploaded_at":"2025-06-01T14:19:07.426000","file_path":"uploads/af266227-2a3b-4022-8a12-f21c59209d00.wav","file_url":"/uploads/af266227-2a3b-4022-8a12-f21c59209d00.wav"}
 ✅ File verification passed
@@ -139,13 +139,13 @@ Response: {"_id":"683c615bfe1d93299b535b68","id":"af266227-2a3b-4022-8a12-f21c59
    Title: Test Audio 84a853
    Category: Test Category
    File URL: /uploads/af266227-2a3b-4022-8a12-f21c59209d00.wav
-   Checking file download from: https://69b0f385-191d-4d9c-8f85-af6b574a2e14.preview.emergentagent.com/uploads/af266227-2a3b-4022-8a12-f21c59209d00.wav
+   Checking file download from: https://1e3d862d-5dd1-4551-a519-06c14af7772e.preview.emergentagent.com/uploads/af266227-2a3b-4022-8a12-f21c59209d00.wav
 ✅ File download successful (0.01 MB)
 
 🔍 Verifying small_chunked upload
 
 === Verifying Uploaded File (ID: ee10be03-021d-4769-a712-474612f93746) ===
-Sending request to: https://69b0f385-191d-4d9c-8f85-af6b574a2e14.preview.emergentagent.com/api/audio-file/ee10be03-021d-4769-a712-474612f93746
+Sending request to: https://1e3d862d-5dd1-4551-a519-06c14af7772e.preview.emergentagent.com/api/audio-file/ee10be03-021d-4769-a712-474612f93746
 Status code: 200
 Response: {"_id":"683c615bfe1d93299b535b69","id":"ee10be03-021d-4769-a712-474612f93746","filename":"ee10be03-021d-4769-a712-474612f93746.wav","original_filename":"test_chunked_5d23b4.wav","title":"Chunked Test Audio c77ecc","category":"Test Category","file_size":176444,"uploaded_at":"2025-06-01T14:19:07.545000","file_path":"uploads/ee10be03-021d-4769-a712-474612f93746.wav","file_url":"/uploads/ee10be03-021d-4769-a712-474612f93746.wav"}
 ✅ File verification passed
@@ -153,13 +153,13 @@ Response: {"_id":"683c615bfe1d93299b535b69","id":"ee10be03-021d-4769-a712-474612
    Title: Chunked Test Audio c77ecc
    Category: Test Category
    File URL: /uploads/ee10be03-021d-4769-a712-474612f93746.wav
-   Checking file download from: https://69b0f385-191d-4d9c-8f85-af6b574a2e14.preview.emergentagent.com/uploads/ee10be03-021d-4769-a712-474612f93746.wav
+   Checking file download from: https://1e3d862d-5dd1-4551-a519-06c14af7772e.preview.emergentagent.com/uploads/ee10be03-021d-4769-a712-474612f93746.wav
 ✅ File download successful (0.01 MB)
 
 🔍 Verifying medium_chunked upload
 
 === Verifying Uploaded File (ID: 0c1641e0-1f71-4dd4-ab4a-b2beeda7a2b8) ===
-Sending request to: https://69b0f385-191d-4d9c-8f85-af6b574a2e14.preview.emergentagent.com/api/audio-file/0c1641e0-1f71-4dd4-ab4a-b2beeda7a2b8
+Sending request to: https://1e3d862d-5dd1-4551-a519-06c14af7772e.preview.emergentagent.com/api/audio-file/0c1641e0-1f71-4dd4-ab4a-b2beeda7a2b8
 Status code: 200
 Response: {"_id":"683c615cfe1d93299b535b6a","id":"0c1641e0-1f71-4dd4-ab4a-b2beeda7a2b8","filename":"0c1641e0-1f71-4dd4-ab4a-b2beeda7a2b8.wav","original_filename":"test_chunked_f3b7f4.wav","title":"Chunked Test Audio 69b68b","category":"Test Category","file_size":5242880,"uploaded_at":"2025-06-01T14:19:08.133000","file_path":"uploads/0c1641e0-1f71-4dd4-ab4a-b2beeda7a2b8.wav","file_url":"/uploads/0c1641e0-1f71-4dd4-ab4a-b2beeda7a2b8.wav"}
 ✅ File verification passed
@@ -167,13 +167,13 @@ Response: {"_id":"683c615cfe1d93299b535b6a","id":"0c1641e0-1f71-4dd4-ab4a-b2beed
    Title: Chunked Test Audio 69b68b
    Category: Test Category
    File URL: /uploads/0c1641e0-1f71-4dd4-ab4a-b2beeda7a2b8.wav
-   Checking file download from: https://69b0f385-191d-4d9c-8f85-af6b574a2e14.preview.emergentagent.com/uploads/0c1641e0-1f71-4dd4-ab4a-b2beeda7a2b8.wav
+   Checking file download from: https://1e3d862d-5dd1-4551-a519-06c14af7772e.preview.emergentagent.com/uploads/0c1641e0-1f71-4dd4-ab4a-b2beeda7a2b8.wav
 ✅ File download successful (0.01 MB)
 
 🔍 Verifying large_chunked upload
 
 === Verifying Uploaded File (ID: 927db5b1-244f-49cf-b5f5-6af2fd66eef9) ===
-Sending request to: https://69b0f385-191d-4d9c-8f85-af6b574a2e14.preview.emergentagent.com/api/audio-file/927db5b1-244f-49cf-b5f5-6af2fd66eef9
+Sending request to: https://1e3d862d-5dd1-4551-a519-06c14af7772e.preview.emergentagent.com/api/audio-file/927db5b1-244f-49cf-b5f5-6af2fd66eef9
 Status code: 200
 Response: {"_id":"683c615cfe1d93299b535b6b","id":"927db5b1-244f-49cf-b5f5-6af2fd66eef9","filename":"927db5b1-244f-49cf-b5f5-6af2fd66eef9.wav","original_filename":"test_chunked_52f78b.wav","title":"Chunked Test Audio 047236","category":"Test Category","file_size":5966960,"uploaded_at":"2025-06-01T14:19:08.726000","file_path":"uploads/927db5b1-244f-49cf-b5f5-6af2fd66eef9.wav","file_url":"/uploads/927db5b1-244f-49cf-b5f5-6af2fd66eef9.wav"}
 ✅ File verification passed
@@ -181,7 +181,7 @@ Response: {"_id":"683c615cfe1d93299b535b6b","id":"927db5b1-244f-49cf-b5f5-6af2fd
    Title: Chunked Test Audio 047236
    Category: Test Category
    File URL: /uploads/927db5b1-244f-49cf-b5f5-6af2fd66eef9.wav
-   Checking file download from: https://69b0f385-191d-4d9c-8f85-af6b574a2e14.preview.emergentagent.com/uploads/927db5b1-244f-49cf-b5f5-6af2fd66eef9.wav
+   Checking file download from: https://1e3d862d-5dd1-4551-a519-06c14af7772e.preview.emergentagent.com/uploads/927db5b1-244f-49cf-b5f5-6af2fd66eef9.wav
 ✅ File download successful (0.01 MB)
 
 ==================================================
